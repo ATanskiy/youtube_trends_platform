@@ -1,0 +1,23 @@
+google-api-python-client
+
+# Kafka Integration
+kafka-python==2.2.15
+
+# AWS S3/MinIO Integration
+boto3==1.40.23
+botocore==1.40.23
+s3transfer==0.13.1
+
+# Hive/Trino Query Support
+PyHive==0.7.0
+thrift==0.16.0
+thrift-sasl==0.4.3
+pure-sasl==0.6.2
+sqlparse==0.5.3
+
+# Configuration & Templating
+PyYAML==6.0.2
+python-dotenv  # Add this for .env file support
+
+# HTTP Requests
+requests==2.32.5

@@ -1,0 +1,9 @@
+.env
+
+.hive-metastore
+.kafka_data
+.minio_anomalies
+.spark_warehouse
+.zookeeper
+.venv
+docs
