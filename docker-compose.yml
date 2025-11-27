@@ -198,7 +198,8 @@ services:
           echo 'Waiting for MinIO to be ready...'
           sleep 3
         done &&
-        mc mb --ignore-existing minio_server/spark
+        mc mb --ignore-existing minio_server/default &&
+        mc mb --ignore-existing minio_server/iceberg
       "
     networks:
       - youtube_trends
