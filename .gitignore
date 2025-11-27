@@ -7,3 +7,6 @@
 .zookeeper
 .venv
 docs
+
+
+airflow/logs
