@@ -69,5 +69,9 @@
         <name>hive.metastore.client.socket.timeout</name>
         <value>1800s</value>
     </property>
+    <property>
+        <name>hive.metastore.warehouse.dir</name>
+        <value>s3a://default/</value>
+    </property>
 
 </configuration>
