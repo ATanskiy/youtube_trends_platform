@@ -117,6 +117,12 @@ services:
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       PYTHONPATH: /opt/streaming
+      AWS_REGION: ${AWS_REGION}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+      THRIFT_HIVE_METASTORE: ${THRIFT_HIVE_METASTORE}
+      SPARK_WAREHOUSE_DIR: ${SPARK_WAREHOUSE_DIR}
+      S3_ENDPOINT_URL: ${S3_ENDPOINT_URL}
+      CATALOG_TYPE: ${CATALOG_TYPE}
     depends_on:
       - hive-metastore
       - kafka_broker
@@ -199,7 +205,7 @@ services:
           sleep 3
         done &&
         mc mb --ignore-existing minio_server/default &&
-        mc mb --ignore-existing minio_server/iceberg
+        mc mb --ignore-existing minio_server/youtube-trends
       "
     networks:
       - youtube_trends
