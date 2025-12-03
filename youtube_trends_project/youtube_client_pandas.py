@@ -2,11 +2,12 @@ import logging
 from typing import Optional, List
 import requests
 import pandas as pd
+import settings
 
 logger = logging.getLogger(__name__)
 
 class YouTubeClientPandas:
-    BASE_URL = "https://www.googleapis.com/youtube/v3"
+    BASE_URL = settings.YOUTUBE_BASE_URL
 
     def __init__(self, api_key: str, session: Optional[requests.Session] = None):
         self.api_key = api_key
