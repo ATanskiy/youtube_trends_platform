@@ -2,11 +2,13 @@ from __future__ import annotations
 import logging
 from typing import Dict, Any, Iterable, Optional
 import requests
+import settings
 
 logger = logging.getLogger(__name__)
 
 class YouTubeClient:
-    BASE_URL = "https://www.googleapis.com/youtube/v3"
+    BASE_URL = settings.YOUTUBE_BASE_URL
+    # "https://www.googleapis.com/youtube/v3"
 
     def __init__(self, api_key: str, session: Optional[requests.Session] = None):
         self.api_key = api_key
