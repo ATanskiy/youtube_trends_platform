@@ -1,7 +1,7 @@
 google-api-python-client
 
 # Kafka Integration
-kafka-python==2.2.15
+kafka-python==2.2.2
 
 # AWS S3/MinIO Integration
 boto3==1.40.23
@@ -17,7 +17,13 @@ sqlparse==0.5.3
 
 # Configuration & Templating
 PyYAML==6.0.2
-python-dotenv  # Add this for .env file support
+python-dotenv
 
 # HTTP Requests
 requests==2.32.5
+
+# Data Processing
+pandas==2.2.3
+
+#isodate
+isodate==0.7.2
