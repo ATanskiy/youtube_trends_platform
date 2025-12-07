@@ -232,9 +232,9 @@ services:
       context: .                  # root of your project
       dockerfile: docker/Dockerfile
     container_name: python-youtube-trends
-    working_dir: /app
+    working_dir: /app/youtube_trends_project
     environment:
-      PYTHONPATH: /app
+      PYTHONPATH: /app/youtube_trends_project
     networks:
       - youtube_trends
     volumes:

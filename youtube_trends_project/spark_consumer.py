@@ -30,7 +30,7 @@ class SparkKafkaConsumer:
                  .select(from_json(col("value"), schema).alias("data")) \
                  .select("data.*")
 
-    def _write_to_minio(self, df, path):
+    def _write_to_minio(self, df, path): 
         return df.writeStream \
             .format("parquet") \
             .option("path", f"{MINIO_BUCKET_PREFIX}/{path}") \

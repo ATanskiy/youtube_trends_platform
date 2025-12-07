@@ -4,6 +4,12 @@ import requests
 import pandas as pd
 import settings
 
+# Set the display width to a specific number of characters
+pd.set_option('display.width', 1000) 
+
+# Set the maximum column width for individual columns
+pd.set_option('display.max_colwidth', 50) 
+
 logger = logging.getLogger(__name__)
 
 class YouTubeClientPandas:
@@ -32,10 +38,10 @@ class YouTubeClientPandas:
         df = pd.json_normalize(items)
         return df
 
-    def get_video_categories_df(self, region_code="US") -> pd.DataFrame:
-        data = self._get("videoCategories", {"part": "snippet", "regionCode": region_code})
+    def get_video_categories_df(self, region: str) -> pd.DataFrame:                
+        data = self._get("videoCategories", {"part": "snippet", "regionCode": region})
         items = data.get("items", [])
-        df = pd.json_normalize(items)
+        df = pd.json_normalize(items)            
         return df
 
     def get_videos_df(self, region_code="US", chart="mostPopular", max_results=50) -> pd.DataFrame:

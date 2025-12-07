@@ -7,7 +7,7 @@ from settings import (
     KAFKA_TOPIC_CATEGORIES,
     KAFKA_TOPIC_VIDEOS,
     KAFKA_TOPIC_COMMENTS,
-    KAFKA_BOOTSTRAP_SERVERS
+    KAFKA_BOOTSTRAP_SERVERS,    
 )
 
 logger = logging.getLogger(__name__)
@@ -16,10 +16,10 @@ class KafkaProducerService:
     def __init__(self, bootstrap_servers: str):
         self.producer = KafkaProducer(
             bootstrap_servers=bootstrap_servers,
-            value_serializer=lambda v: json.dumps(v).encode("utf-8"),
+            value_serializer=lambda v: json.dumps(v).encode("utf-8"),       
             key_serializer=lambda v: str(v).encode("utf-8") if v else None,
             linger_ms=10,
-            retries=3,
+            retries=5,
         )
 
     def send(self, topic: str, key: str, value: Dict[str, Any]) -> None:
@@ -39,7 +39,7 @@ class YouTubeKafkaProducer:
 
     def send_region(self, region_obj: Dict[str, Any]):
         key = region_obj.get("id") or region_obj.get("snippet", {}).get("gl")
-        self.producer_service.send(self.topic_regions, key, region_obj)
+        self.producer_service.send(self.topic_regions, key, region_obj) 
 
     def send_category(self, category_obj: Dict[str, Any]):
         key = category_obj.get("id")
