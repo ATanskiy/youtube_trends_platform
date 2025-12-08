@@ -1,0 +1,70 @@
+version: 2
+
+models:
+  - name: dim_users
+    description: "Denormalized user dimension combining identity, contact, pictures, geography, and metadata for BI dashboards."
+    columns:
+
+      - name: user_id
+        description: "Primary unique identifier for each user."
+        tests: [not_null, unique]
+
+      - name: gender
+        description: "User’s reported gender."
+
+      - name: first_name
+        description: "User’s first name."
+
+      - name: last_name
+        description: "User’s last name."
+
+      - name: full_name
+        description: "Convenience field: first name + last name."
+
+      - name: email
+        description: "Email address."
+
+      - name: phone
+        description: "Primary phone number."
+
+      - name: cell
+        description: "Secondary mobile number."
+
+      - name: picture_large
+        description: "High-resolution profile picture."
+
+      - name: picture_medium
+        description: "Medium-resolution profile picture."
+
+      - name: picture_thumbnail
+        description: "Thumbnail-sized profile picture."
+
+      - name: city
+        description: "User’s city."
+
+      - name: state
+        description: "User’s state or region name."
+
+      - name: state_id
+        description: "State abbreviation (e.g., CA)."
+
+      - name: postcode
+        description: "Postal code."
+
+      - name: latitude
+        description: "Latitude coordinate."
+
+      - name: longitude
+        description: "Longitude coordinate."
+
+      - name: created_at
+        description: "Timestamp when source system created the user."
+
+      - name: inserted_at
+        description: "Timestamp when bronze layer ingested the event."
+
+      - name: age
+        description: "User age derived from created_at."
+
+      - name: region_group
+        description: "Custom grouping of states for dashboard filtering."
