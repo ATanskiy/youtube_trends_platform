@@ -298,7 +298,7 @@ services:
       dockerfile: ./dbt_youtube_trends/Dockerfile.dbt_youtube_trends
     container_name: dbt_spark
     volumes:
-      - ./dbt_matchstream:/workspace
+      - ./dbt_youtube_trends:/workspace
     environment:
       DBT_PROFILES_DIR: /workspace
     networks:
