@@ -1,0 +1,12 @@
+youtube_trends_platform:
+  target: dev
+  outputs:
+    dev:
+      type: spark
+      method: thrift
+      host: spark_thriftserver
+      port: 10001
+      catalog: youtube_trends
+      schema: youtube_trends.silver
+      threads: 10
+      auth: NOSASL

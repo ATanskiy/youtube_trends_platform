@@ -1,0 +1,30 @@
+name: 'youtube_trends_platform'
+version: '1.0.0'
+
+profile: 'dbt_matchstream'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  youtube_trends_platform:
+    
+    silver:
+      +schema: silver
+      +materialized: table
+      +file_format: iceberg
+      +table_type: iceberg
+      
+    gold:
+      +schema: gold  
+      +materialized: table
+      +file_format: iceberg
+      +table_type: iceberg
