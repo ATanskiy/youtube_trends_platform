@@ -57,3 +57,16 @@ class SparkKafkaConsumer:
         df = self._read_kafka(KAFKA_TOPIC_COMMENTS)
         parsed = self._parse_json(df, self.schema_provider.comments_schema())
         return self._write_to_minio(parsed, "comments")
+
+    def create_table(self, table_name):        
+        self.spark.sql("""
+        CREATE TABLE youtube_trends.bronze.{table_name} (
+            id BIGINT,
+            name STRING,
+            created_at TIMESTAMP
+        )
+        USING iceberg
+        LOCATION 's3a://youtube-trends/bronze/youtube_regions'
+        """)
+
+        print("✓ Created table youtube-trends.silver.test_iceberg_table")

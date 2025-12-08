@@ -28,9 +28,11 @@ class Orchestrator:
         return df['id'].to_list()        
     
     def produce_regions_df(self):        
-        df = self.youtube_client_pandas.get_regions_df() 
-        for index, row in df.iterrows():
-            print(row.to_json())
+        df = self.youtube_client_pandas.get_regions_df()         
+        json_string = df.to_json()
+        print(json_string)
+        # for index, row in df.iterrows():
+        #     print(row.to_json())
 
     def produce_categories_df(self, regions:str):                
         categories_df = pd.DataFrame()
@@ -61,13 +63,11 @@ class Orchestrator:
 
 
     def produce_regions(self):              
+        regions = self.youtube_client.get_regions()        
         for region in self.youtube_client.get_regions():            
-            region_dict = {}            
-            #region_dict[region.get("id")] = {"id": region.get("id"), "name": region.get("snippet").get("name")}
+            region_dict = {}                        
             region_dict["id"] = region.get("id")
-            region_dict["name"] = region.get("snippet").get("name")
-            # region_json = json.dumps(region_dict)  
-            # print(region_json)
+            region_dict["name"] = region.get("snippet").get("name")            
             self.kafka_producer.send("youtube_regions", region.get("id"), region_dict)        
 
 
@@ -77,34 +77,17 @@ class Orchestrator:
                 category_dict = {}            
                 category_dict["id"] = category.get("id")
                 category_dict["name"] = category.get("snippet")["title"]
-                # category_dict[(category.get("id"))] =  category.get("snippet").get("title")                     
-                # category_dict[(region, category.get("id"))] = { \                
-                    # "name": category.get("snippet").get("title"), \
-                    # "assignable": category.get("snippet").get("assignable")
-                # }
-
-                # json_ready = [
-                #     {"key": list(k), "value": v}
-                #     for k, v in category_dict.items()
-                # ]
-
-                # category_json = json.dumps(json_ready, indent=4)
-                # print(category_json)
-
-                # region_json = json.dumps(category_dict)  
-                # print(region_json)
-                # print(category_dict)  
                 self.kafka_producer.send("youtube_categories", category.get("id"), category_dict)       
+
 
     def produce_videos(self, regions, max_results=50):
         for region in regions:
             for video in self.youtube_client.get_videos(region, max_results=max_results):
                 video_dict = {}                            
-                # video_dict[video.get("id")] = { \
                 video_dict["id"] = video.get("id")
                 video_dict["title"] = video.get("snippet")["localized"]["title"]
                 video_dict["description"] = video.get("snippet").get("localized").get("description")
-                video_dict["published_at"] = video.get("snippet")["publishedAt"]
+                video_dict["publishedAt"] = video.get("snippet")["publishedAt"]
                 video_dict["channelId"] = video.get("snippet")["channelId"]
                 video_dict["channelTitle"] = video.get("snippet")["channelTitle"]
                 video_dict["categoryId"] = video.get("snippet")["categoryId"]
@@ -113,10 +96,8 @@ class Orchestrator:
                 video_dict["likeCount"] = video.get("statistics")["likeCount"]
                 video_dict["favoriteCount"] = video.get("statistics")["favoriteCount"]
                 video_dict["commentCount"] = video.get("statistics")["commentCount"]
-                # video_json = json.dumps(video_dict)  
-                # print(video_json)
-                # self.produce_comments(video_dict.keys())
                 self.kafka_producer.send("youtube_videos", video.get("id"), video_dict)
+
 
     def produce_comments(self, video_ids):        
         counter = 0
@@ -134,13 +115,4 @@ class Orchestrator:
                 print(comment_json)
             if counter == 3:
                 break
-                # self.kafka_producer.send("youtube_comments", comment.get("id"), comment)
-
-    def start_spark_streams(self):
-        queries = []
-        queries.append(self.spark_consumer.consume_regions().start())
-        queries.append(self.spark_consumer.consume_categories().start())
-        queries.append(self.spark_consumer.consume_videos().start())
-        queries.append(self.spark_consumer.consume_comments().start())
-        for q in queries:
-            q.awaitTermination()
+                # self.kafka_producer.send("youtube_comments", comment.get("id"), comment)    
