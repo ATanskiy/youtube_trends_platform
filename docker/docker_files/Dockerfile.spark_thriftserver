@@ -1,0 +1,19 @@
+FROM apache/spark:3.5.1
+
+USER root
+WORKDIR /workspace
+
+# Download Iceberg and AWS S3 support jars
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/* && \
+    curl -L -o /opt/spark/jars/iceberg-spark-runtime-3.5_2.12-1.5.2.jar \
+      https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-spark-runtime-3.5_2.12/1.5.2/iceberg-spark-runtime-3.5_2.12-1.5.2.jar && \
+    curl -L -o /opt/spark/jars/hadoop-aws-3.3.3.jar \
+      https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.3/hadoop-aws-3.3.3.jar && \
+    curl -L -o /opt/spark/jars/aws-java-sdk-bundle-1.12.754.jar \
+      https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.754/aws-java-sdk-bundle-1.12.754.jar
+
+# Copy custom Spark Thrift Server startup script
+COPY ./docker/scripts/spark_thriftserver/start_thrift.sh /start_thrift.sh
+RUN chmod +x /start_thrift.sh
+
+CMD ["/start_thrift.sh"]

@@ -1,15 +1,12 @@
 .env
 
-.hive-metastore
-.kafka_data
-.minio_anomalies
-.spark_warehouse
-.zookeeper
+volumes/
 .venv
 docs
 
 airflow/logs/
 __pycache__/
+envs/
 
 *.pyc
 *.log
