@@ -1,0 +1,40 @@
+# ------------------------------------------------------
+# Base Image
+# ------------------------------------------------------
+FROM python:3.11-slim
+
+# ------------------------------------------------------
+# Working Directory
+# ------------------------------------------------------
+WORKDIR /app
+
+# ------------------------------------------------------
+# System Dependencies (needed for psycopg2, pandas, etc.)
+# ------------------------------------------------------
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    python3-dev \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# ------------------------------------------------------
+# Install ALL Python Libraries Directly Here
+# ------------------------------------------------------
+RUN pip install --no-cache-dir \
+    google-api-python-client \
+    kafka-python==2.2.2 \
+    python-dotenv \
+    requests==2.32.5 \
+    pandas==2.2.3 \
+    isodate==0.7.2
+
+# ------------------------------------------------------
+# Copy all project files
+# ------------------------------------------------------
+COPY . .
+
+# ------------------------------------------------------
+# Default command (keep container alive)
+# ------------------------------------------------------
+CMD ["tail", "-f", "/dev/null"]

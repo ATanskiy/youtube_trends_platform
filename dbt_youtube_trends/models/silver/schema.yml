@@ -1,0 +1,119 @@
+version: 2
+
+models:
+
+  # ============================================================
+  # USERS (core identity information)
+  # ============================================================
+  - name: users
+    description: "Core user identity fields extracted from JSON."
+    columns:
+      - name: user_id
+        description: "Primary unique identifier of the user."
+        tests: [not_null, unique]
+
+      - name: gender
+        description: "User’s gender as reported in the event payload."
+
+      - name: first_name
+        description: "User’s given name."
+
+      - name: last_name
+        description: "User’s family name."
+
+      - name: inserted_at
+        description: "Timestamp when the raw event was inserted into the bronze table."
+
+  # ============================================================
+  # USERS_CONTACT
+  # ============================================================
+  - name: users_contact
+    description: "User contact information including email and phone numbers."
+    columns:
+      - name: user_id
+        description: "Foreign key tying contact data to the main user table."
+        tests: [not_null, unique]
+
+      - name: email
+        description: "User’s email address."
+
+      - name: phone
+        description: "Primary telephone number."
+
+      - name: cell
+        description: "Secondary or mobile phone number."
+
+      - name: inserted_at
+        description: "Timestamp when the raw event was inserted."
+
+  # ============================================================
+  # USERS_PICTURE
+  # ============================================================
+  - name: users_picture
+    description: "Profile picture URLs for various resolutions."
+    columns:
+      - name: user_id
+        description: "Foreign key tying picture data to the main user table."
+        tests: [not_null, unique]
+
+      - name: picture_large
+        description: "URL of the high-resolution profile picture."
+
+      - name: picture_medium
+        description: "URL of the medium-resolution profile picture."
+
+      - name: picture_thumbnail
+        description: "URL of the thumbnail profile picture."
+
+      - name: inserted_at
+        description: "Timestamp when the raw event was inserted."
+
+  # ============================================================
+  # USERS_GEO
+  # ============================================================
+  - name: users_geo
+    description: "Geographical attributes associated with the user."
+    columns:
+      - name: user_id
+        description: "Foreign key tying location data to the main user table."
+        tests: [not_null, unique]
+
+      - name: city
+        description: "City where the user is located."
+
+      - name: state
+        description: "Name of the state or region."
+
+      - name: state_id
+        description: "State code (e.g. CA for California)."
+
+      - name: postcode
+        description: "Postal code."
+
+      - name: latitude
+        description: "Latitude coordinate of the user’s location."
+
+      - name: longitude
+        description: "Longitude coordinate of the user’s location."
+
+      - name: inserted_at
+        description: "Timestamp when the raw event was inserted."
+
+  # ============================================================
+  # USERS_METADATA
+  # ============================================================
+  - name: users_metadata
+    description: "Additional metadata including timestamps and sensitive attributes."
+    columns:
+      - name: user_id
+        description: "Foreign key tying metadata to the main user table."
+        tests: [not_null, unique]
+
+      - name: created_at
+        description: "Timestamp embedded inside the JSON indicating when the user object was created upstream."
+
+      - name: password
+        description: "Password value from source JSON (not recommended for analytical storage)."
+
+      - name: inserted_at
+        description: "Timestamp when the raw event was inserted."
