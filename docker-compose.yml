@@ -106,8 +106,8 @@ services:
     mem_reservation: 6g
     volumes:
       - ./.spark_warehouse:/spark-warehouse
-      - ./configs/spark/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
-      - ./configs/spark/hive-site.xml:/opt/spark/conf/hive-site.xml
+      - ./configs/spark_streaming/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+      - ./configs/spark_streaming/hive-site.xml:/opt/spark/conf/hive-site.xml
       - ./configs:/opt/streaming/configs
       - ./jobs:/opt/streaming/jobs
     env_file:

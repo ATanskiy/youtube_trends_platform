@@ -1,5 +1,6 @@
 import json
 import isodate
+from datetime import datetime, timezone
 import pandas as pd
 from youtube_client import YouTubeClient
 from youtube_client_pandas import YouTubeClientPandas
@@ -68,6 +69,7 @@ class Orchestrator:
             region_dict = {}                        
             region_dict["id"] = region.get("id")
             region_dict["name"] = region.get("snippet").get("name")            
+            region_dict["created_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
             self.kafka_producer.send("youtube_regions", region.get("id"), region_dict)        
 
 
@@ -77,6 +79,7 @@ class Orchestrator:
                 category_dict = {}            
                 category_dict["id"] = category.get("id")
                 category_dict["name"] = category.get("snippet")["title"]
+                category_dict["created_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
                 self.kafka_producer.send("youtube_categories", category.get("id"), category_dict)       
 
 
@@ -87,15 +90,18 @@ class Orchestrator:
                 video_dict["id"] = video.get("id")
                 video_dict["title"] = video.get("snippet")["localized"]["title"]
                 video_dict["description"] = video.get("snippet").get("localized").get("description")
-                video_dict["publishedAt"] = video.get("snippet")["publishedAt"]
-                video_dict["channelId"] = video.get("snippet")["channelId"]
-                video_dict["channelTitle"] = video.get("snippet")["channelTitle"]
-                video_dict["categoryId"] = video.get("snippet")["categoryId"]
+                video_dict["region_id"] = region
+                video_dict["published_at"] = video.get("snippet")["publishedAt"]
+                video_dict["channel_id"] = video.get("snippet")["channelId"]
+                video_dict["channel_title"] = video.get("snippet")["channelTitle"]
+                video_dict["category_id"] = video.get("snippet")["categoryId"]
                 video_dict["duration"] = str(isodate.parse_duration(video.get("contentDetails")["duration"]))
-                video_dict["viewCount"] = video.get("statistics")["viewCount"]
-                video_dict["likeCount"] = video.get("statistics")["likeCount"]
-                video_dict["favoriteCount"] = video.get("statistics")["favoriteCount"]
-                video_dict["commentCount"] = video.get("statistics")["commentCount"]
+                video_dict["view_count"] =   int(video.get("statistics")["viewCount"])
+                video_dict["like_count"] = int(video.get("statistics")["likeCount"])
+                video_dict["favorite_count"] = int(video.get("statistics")["favoriteCount"])
+                video_dict["comment_count"] = int(video.get("statistics")["commentCount"])
+                video_dict["created_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
+                # print(video_dict)
                 self.kafka_producer.send("youtube_videos", video.get("id"), video_dict)
 
 

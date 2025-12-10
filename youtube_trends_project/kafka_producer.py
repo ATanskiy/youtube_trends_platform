@@ -24,6 +24,7 @@ class KafkaProducerService:
 
     def send(self, topic: str, key: str, value: Dict[str, Any]) -> None:
         logger.debug("Producing to %s key=%s value=%s", topic, key, value)
+        print("Producing to %s key=%s value=%s", topic, key, value)
         self.producer.send(topic, key=key, value=value)
 
     def flush(self):
