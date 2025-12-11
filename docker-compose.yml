@@ -31,7 +31,6 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka_broker:9092,PLAINTEXT_HOST://localhost:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
     volumes:
       - ./volumes/.kafka_data:/var/lib/kafka/data
     networks:
@@ -79,7 +78,6 @@ services:
       - '9083:9083' # Metastore Thrift
     env_file:
       - envs/.env.pg_hive_db
-      - envs/.env.minio
     depends_on:
       pg_hive_db:
         condition: service_healthy
@@ -101,7 +99,7 @@ services:
       context: .
       dockerfile: ./docker/docker_files/Dockerfile.spark_streaming
     container_name: spark_streaming
-    working_dir: /opt/streaming
+    working_dir: /opt/streaming/jobs
     tmpfs:
       - /tmp:size=4G,exec
     ports:
@@ -117,9 +115,6 @@ services:
       - ./jobs:/opt/streaming/jobs
     env_file:
       - envs/.env.spark_streaming
-      - envs/.env.pg_hive_db
-      - envs/.env.minio
-      - envs/.env.kafka
     depends_on:
       - hive_metastore
       - kafka_broker
@@ -160,13 +155,11 @@ services:
       - envs/.env.airflow
     volumes:
       - ./airflow/dags:/opt/airflow/dags
-      - ./jobs:/opt/airflow/jobs
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
-      - ./configs:/opt/airflow/configs
-      - ./envs/.env.airflow:/opt/airflow/.env.airflow
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ./jobs:/opt/airflow/jobs
       - ./docker/scripts/airflow/airflow_scheduler_entrypoint.sh:/opt/airflow/airflow_scheduler_entrypoint.sh
+      - /var/run/docker.sock:/var/run/docker.sock
     healthcheck:
       test: ["CMD", "airflow", "jobs", "check", "--job-type", "SchedulerJob"]
       interval: 15s
@@ -190,13 +183,11 @@ services:
       - envs/.env.airflow
     volumes:
       - ./airflow/dags:/opt/airflow/dags
-      - ./jobs:/opt/airflow/jobs
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
-      - ./configs:/opt/airflow/configs
-      - ./envs/.env.airflow:/opt/airflow/.env.airflow
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ./jobs:/opt/airflow/jobs
       - ./docker/scripts/airflow/airflow_webserver_entrypoint.sh:/opt/airflow/airflow_webserver_entrypoint.sh
+      - /var/run/docker.sock:/var/run/docker.sock
     entrypoint: ["/opt/airflow/airflow_webserver_entrypoint.sh"]
     networks:
       - youtube_trends
@@ -240,13 +231,16 @@ services:
       - "8080:8080"
     volumes:
       - ./configs/trino:/etc/trino
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-trino-datasource
     env_file:
-      - .env
+      - envs/.env.trino
     depends_on:
       - hive_metastore
       - minio
     networks:
       - youtube_trends
+    user: "0"
 
     # Python container
   python_youtube_trends:
@@ -262,7 +256,7 @@ services:
     volumes:
       - .:/app
     env_file:
-      - .env
+      - envs/.env.python_youtube_trends
     tty: true
     stdin_open: true
 
@@ -284,7 +278,6 @@ services:
       - ./configs/spark_iceberg/hive-site.xml:/opt/spark/conf/hive-site.xml
     env_file:
       - ./envs/.env.spark_thriftserver
-      - ./envs/.env.minio
     command: ["/start_thrift.sh"]
     depends_on:
       hive_metastore:
@@ -307,6 +300,23 @@ services:
       - spark_thriftserver
     tty: true
     stdin_open: true
+
+  # Grafana
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./configs/grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
+      - ./docker/scripts/grafana/install-plugin.sh:/install-plugin.sh
+      - ./volumes/.grafana_data:/var/lib/grafana
+    depends_on:
+      - trino
+    restart: unless-stopped
+    networks:
+      - youtube_trends
+    entrypoint: ["/install-plugin.sh"]
 
 networks:
   youtube_trends:
