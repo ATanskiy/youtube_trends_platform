@@ -231,6 +231,8 @@ services:
       - "8080:8080"
     volumes:
       - ./configs/trino:/etc/trino
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-trino-datasource
     env_file:
       - envs/.env.trino
     depends_on:
@@ -238,6 +240,7 @@ services:
       - minio
     networks:
       - youtube_trends
+    user: "0"
 
     # Python container
   python_youtube_trends:
@@ -297,6 +300,23 @@ services:
       - spark_thriftserver
     tty: true
     stdin_open: true
+
+  # Grafana
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./configs/grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
+      - ./docker/scripts/grafana/install-plugin.sh:/install-plugin.sh
+      - ./volumes/.grafana_data:/var/lib/grafana
+    depends_on:
+      - trino
+    restart: unless-stopped
+    networks:
+      - youtube_trends
+    entrypoint: ["/install-plugin.sh"]
 
 networks:
   youtube_trends:
