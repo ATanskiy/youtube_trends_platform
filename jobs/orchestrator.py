@@ -1,9 +1,6 @@
 # import json
 # import isodate
 # import pandas as pd
-# from youtube_client import YouTubeClient
-# from youtube_client_pandas import YouTubeClientPandas
-# from kafka_producer import KafkaProducerService
 from spark_session import SparkSessionFactory
 from spark_consumer import SparkKafkaConsumer
 from spark_schema import SparkSchema
@@ -14,10 +11,7 @@ from settings import (
 
 
 class Orchestrator:
-    def __init__(self):
-        # self.youtube_client = YouTubeClient(YOUTUBE_API_KEY)
-        # self.youtube_client_pandas = YouTubeClientPandas(YOUTUBE_API_KEY)        
-        # self.kafka_producer = KafkaProducerService(bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS)        
+    def __init__(self):        
         spark_factory = SparkSessionFactory()
         self.spark = spark_factory.create_session()
         self.schema_provider = SparkSchema()
