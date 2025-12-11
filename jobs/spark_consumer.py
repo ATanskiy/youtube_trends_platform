@@ -96,7 +96,7 @@ class SparkKafkaConsumer:
             return (
                 df.writeStream.foreachBatch(self.write_regions_to_iceberg)
                 .outputMode("append")
-                .option("checkpointLocation", f"{MINIO_YOUTUBE_TRENDS_BUCKET}/{namespace}_{table}_checkpoint")
+                .option("checkpointLocation", f"s3a://{MINIO_YOUTUBE_TRENDS_BUCKET}/{namespace}_{table}_checkpoint")
                 .option("startingOffsets", "latest")                
                 .trigger(processingTime="10 seconds")
             )
@@ -105,7 +105,7 @@ class SparkKafkaConsumer:
             return (
             df.writeStream.foreachBatch(self.write_categories_to_iceberg)
             .outputMode("append")
-            .option("checkpointLocation", f"{MINIO_YOUTUBE_TRENDS_BUCKET}/{namespace}_{table}_checkpoint")
+            .option("checkpointLocation", f"s3a://{MINIO_YOUTUBE_TRENDS_BUCKET}/{namespace}_{table}_checkpoint")
             .option("startingOffsets", "latest")                
             .trigger(processingTime="10 seconds")
             )
@@ -114,7 +114,7 @@ class SparkKafkaConsumer:
             return (
             df.writeStream.foreachBatch(self.write_videos_to_iceberg)
             .outputMode("append")
-            .option("checkpointLocation", f"{MINIO_YOUTUBE_TRENDS_BUCKET}/{namespace}_{table}_checkpoint")
+            .option("checkpointLocation", f"s3a://{MINIO_YOUTUBE_TRENDS_BUCKET}/{namespace}_{table}_checkpoint")
             .option("startingOffsets", "latest")                
             .trigger(processingTime="10 seconds")
             )
@@ -124,7 +124,7 @@ class SparkKafkaConsumer:
         return df.writeStream \
             .format("parquet") \
             .option("path", f"{MINIO_BUCKET_PREFIX}/{path}") \
-            .option("checkpointLocation", f"{MINIO_BUCKET_PREFIX}/{path}/_checkpoint") \
+            .option("checkpointLocation", f"s3a:///{path}/_checkpoint") \
             .outputMode("append") \
             .trigger(processingTime="15 seconds")
 
