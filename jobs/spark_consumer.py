@@ -95,7 +95,7 @@ class SparkKafkaConsumer:
         if table == "regions":
             return (
                 df.writeStream.foreachBatch(self.write_regions_to_iceberg)
-                .outputMode("append")
+                .outputMode("update")
                 .option("checkpointLocation", f"s3a://{MINIO_YOUTUBE_TRENDS_BUCKET}/checkpoints/{namespace}/{table}")
                 .option("startingOffsets", "latest")                
                 .trigger(processingTime="10 seconds")
@@ -104,7 +104,7 @@ class SparkKafkaConsumer:
         if table == "categories":                
             return (
             df.writeStream.foreachBatch(self.write_categories_to_iceberg)
-            .outputMode("append")
+            .outputMode("update")
             .option("checkpointLocation", f"s3a://{MINIO_YOUTUBE_TRENDS_BUCKET}/checkpoints/{namespace}/{table}")
             .option("startingOffsets", "latest")                
             .trigger(processingTime="10 seconds")
