@@ -22,7 +22,9 @@ RUN pip install \
     requests \
     s3transfer \
     six \
-    urllib3
+    urllib3 \
+    pandas==2.0.2 \
+    python-dotenv==1.0.1
 
 # Verify the installation works
 RUN python3 -c "import kafka; print('kafka-python installed successfully')"

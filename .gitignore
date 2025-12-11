@@ -6,9 +6,7 @@ docs
 
 airflow/logs/
 __pycache__/
-envs/
 
 *.pyc
 *.log
 *.db
-.env

@@ -34,14 +34,10 @@ pandas==2.2.3
 
 psycopg2-binary==2.9.9
 
-# For UI
-streamlit==1.40.0
-
 # trino
 trino==0.328.0
 
-# HTTP Requests
-requests==2.32.5
-
 #isodate
 isodate==0.6.1
+
+python-dotenv==1.0.1
