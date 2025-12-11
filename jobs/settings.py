@@ -1,0 +1,62 @@
+import os
+from dotenv import load_dotenv
+
+# Load .env file
+load_dotenv()
+
+# ----------------------------
+# YouTube API
+# ----------------------------
+YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
+YOUTUBE_BASE_URL= os.getenv("YOUTUBE_BASE_URL")
+
+# ----------------------------
+# Kafka
+# ----------------------------
+KAFKA_BOOTSTRAP_SERVERS = os.getenv("KAFKA_BOOTSTRAP_SERVERS")
+KAFKA_TOPIC_REGIONS = os.getenv("KAFKA_TOPIC_REGIONS")
+KAFKA_TOPIC_CATEGORIES = os.getenv("KAFKA_TOPIC_CATEGORIES")
+KAFKA_TOPIC_VIDEOS = os.getenv("KAFKA_TOPIC_VIDEOS")
+KAFKA_TOPIC_COMMENTS = os.getenv("KAFKA_TOPIC_COMMENTS")
+
+# ----------------------------
+# MinIO / S3
+# ----------------------------
+MINIO_ENDPOINT = os.getenv("MINIO_ENDPOINT_URL")
+MINIO_ACCESS_KEY = os.getenv("MINIO_ROOT_USER")
+MINIO_SECRET_KEY = os.getenv("MINIO_ROOT_PASSWORD")
+MINIO_BUCKET_PREFIX = os.getenv("S3_PREFIX")
+AWS_REGION = os.getenv("AWS_REGION")
+MINIO_YOUTUBE_TRENDS_BUCKET = "youtube-trends"
+MINIO_YOUTUBE_TRENDS_CATALOG = "youtube_trends"
+MINIO_BRONZE_NAMESPACE = "bronze"
+MINIO_SILVER_NAMESPACE = "silver"
+MINIO_GOLD_NAMESPACE = "gold"
+MINIO_REGIONS_TABLE = "regions"
+MINIO_CATEGORIES_TABLE = "categories"
+MINIO_VIDEOS_TABLE = "videos"
+
+# MinIO Configuration
+MINIO_ROOT_USER=os.getenv("MINIO_ROOT_USER")
+MINIO_ROOT_PASSWORD=os.getenv("MINIO_ROOT_PASSWORD")
+S3_ENDPOINT_URL=os.getenv("S3_ENDPOINT_URL")
+S3_PREFIX=os.getenv("S3_PREFIX")
+S3_BUCKET=os.getenv("S3_BUCKET")
+MINIO_API_SELECT_PARQUET=os.getenv("MINIO_API_SELECT_PARQUET")
+
+# AWS/S3 Credentials
+AWS_ACCESS_KEY_ID=os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY=os.getenv("AWS_SECRET_ACCESS_KEY")
+
+# SPARK Configuration
+SPARK_MODE_MASTER=os.getenv("SPARK_MODE_MASTER")
+SPARK_MODE_CLIENT=os.getenv("SPARK_MODE_CLIENT")
+HIVE_SERVER2_THRIFT_BIND_HOST=os.getenv("HIVE_SERVER2_THRIFT_BIND_HOST")
+THRIFT_HIVE_METASTORE=os.getenv("THRIFT_HIVE_METASTORE")
+SPARK_WAREHOUSE_DIR=os.getenv("SPARK_WAREHOUSE_DIR")
+CATALOG_TYPE=os.getenv("CATALOG_TYPE")
+AWS_REGION=os.getenv("AWS_REGION")
+AWS_DEFAULT_REGION=os.getenv("AWS_DEFAULT_REGION")
+SPARK_APP_NAME=os.getenv("SPARK_APP_NAME")
+SPARK_MASTER=os.getenv("SPARK_MASTER")
+SPARK_KAFKA_PACKAGE=os.getenv("SPARK_KAFKA_PACKAGE")
