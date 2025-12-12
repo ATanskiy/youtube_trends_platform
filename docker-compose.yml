@@ -307,8 +307,11 @@ services:
     container_name: grafana
     ports:
       - "3000:3000"
+    env_file:
+      - envs/.env.grafana
     volumes:
       - ./configs/grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
+      - ./configs/grafana/dashboards/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
       - ./docker/scripts/grafana/install-plugin.sh:/install-plugin.sh
       - ./volumes/.grafana_data:/var/lib/grafana
     depends_on:
@@ -317,6 +320,29 @@ services:
     networks:
       - youtube_trends
     entrypoint: ["/install-plugin.sh"]
+
+  grafana-exporter:
+    image: alpine:latest
+    container_name: grafana-exporter
+    volumes:
+      - ./configs/grafana/dashboards:/dashboards-export
+      - ./docker/scripts/grafana/export-dashboards.sh:/export-dashboards.sh
+    depends_on:
+      - grafana
+    restart: unless-stopped
+    networks:
+      - youtube_trends
+    command:
+      - /bin/sh
+      - -c
+      - |
+        apk add --no-cache curl jq bash
+        chmod +x /export-dashboards.sh
+        while true; do
+          /export-dashboards.sh
+          sleep 60
+        done
+
 
 networks:
   youtube_trends:
