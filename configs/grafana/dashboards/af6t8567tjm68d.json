@@ -1,0 +1,504 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "trino-datasource",
+        "uid": "P7ECE1322F3C936D3"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "shades"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "sishort"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 5,
+        "x": 0,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.7,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "trino-datasource",
+            "uid": "P7ECE1322F3C936D3"
+          },
+          "format": 0,
+          "rawSQL": "SELECT \n    r.name AS region,    \n    SUM(like_count) AS likes\nFROM youtube_trends.bronze.videos v\nLEFT JOIN youtube_trends.bronze.regions r\n    ON r.id = v.region_id\nLEFT JOIN youtube_trends.bronze.languages l\n    ON l.id = v.language_id   \nLEFT JOIN youtube_trends.bronze.categories c\n    ON c.id = v.category_id\nWHERE from_iso8601_timestamp(published_at) >= $__timeFrom()\n  AND from_iso8601_timestamp(published_at) <= $__timeTo()    \nGROUP BY r.name\nORDER BY likes DESC\nLIMIT 10\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Top 10 Regions with highest likes ",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "trino-datasource",
+        "uid": "P7ECE1322F3C936D3"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "sishort"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 5,
+        "x": 5,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.7,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "trino-datasource",
+            "uid": "P7ECE1322F3C936D3"
+          },
+          "format": 0,
+          "rawSQL": "SELECT \n    r.name AS region,    \n    SUM(like_count) AS likes\nFROM youtube_trends.bronze.videos v\nLEFT JOIN youtube_trends.bronze.regions r\n    ON r.id = v.region_id\nLEFT JOIN youtube_trends.bronze.languages l\n    ON l.id = v.language_id   \nLEFT JOIN youtube_trends.bronze.categories c\n    ON c.id = v.category_id\nWHERE from_iso8601_timestamp(published_at) >= $__timeFrom()\n  AND from_iso8601_timestamp(published_at) <= $__timeTo()    \nGROUP BY r.name\nORDER BY likes ASC\nLIMIT 10\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Top 10 Regions with lowest likes ",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "trino-datasource",
+        "uid": "P7ECE1322F3C936D3"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 10,
+        "x": 14,
+        "y": 0
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "trino-datasource",
+            "uid": "P7ECE1322F3C936D3"
+          },
+          "format": 0,
+          "rawSQL": "SELECT\n    date_trunc('hour', from_iso8601_timestamp(published_at)) AS time,\n    language_id_src,\n    AVG(view_count) AS total_views    \nFROM youtube_trends.bronze.videos\nGROUP BY\n    1, --time,\n    language_id_src\nORDER BY\n    1,\n    language_id_src",
+          "refId": "A"
+        }
+      ],
+      "title": "Panel Title",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "trino-datasource",
+        "uid": "P7ECE1322F3C936D3"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "sishort"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 5,
+        "x": 0,
+        "y": 7
+      },
+      "id": 7,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.7,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "trino-datasource",
+            "uid": "P7ECE1322F3C936D3"
+          },
+          "format": 0,
+          "rawSQL": "SELECT \n    r.name AS region,    \n    SUM(view_count) AS views\nFROM youtube_trends.bronze.videos v\nLEFT JOIN youtube_trends.bronze.regions r\n    ON r.id = v.region_id\nLEFT JOIN youtube_trends.bronze.languages l\n    ON l.id = v.language_id   \nLEFT JOIN youtube_trends.bronze.categories c\n    ON c.id = v.category_id\nWHERE from_iso8601_timestamp(published_at) >= $__timeFrom()\n  AND from_iso8601_timestamp(published_at) <= $__timeTo()    \nGROUP BY r.name\nORDER BY views DESC\nLIMIT 10\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Top 10 Regions with highest views",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "trino-datasource",
+        "uid": "P7ECE1322F3C936D3"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "sishort"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 5,
+        "x": 5,
+        "y": 7
+      },
+      "id": 9,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.7,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "trino-datasource",
+            "uid": "P7ECE1322F3C936D3"
+          },
+          "format": 0,
+          "rawSQL": "SELECT \n    r.name AS region,    \n    SUM(view_count) AS views\nFROM youtube_trends.bronze.videos v\nLEFT JOIN youtube_trends.bronze.regions r\n    ON r.id = v.region_id\nLEFT JOIN youtube_trends.bronze.languages l\n    ON l.id = v.language_id   \nLEFT JOIN youtube_trends.bronze.categories c\n    ON c.id = v.category_id\nWHERE from_iso8601_timestamp(published_at) >= $__timeFrom()\n  AND from_iso8601_timestamp(published_at) <= $__timeTo()    \nGROUP BY r.name\nORDER BY views ASC\nLIMIT 10\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Top 10 Regions with lowest views",
+      "type": "barchart"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Yaron Test",
+  "uid": "af6t8567tjm68d",
+  "version": 5,
+  "weekStart": ""
+}

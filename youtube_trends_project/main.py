@@ -4,9 +4,10 @@ from orchestrator import Orchestrator
 
 def main(name):
         
-    regions = ["US", "IL"]     
+    orchestrator = Orchestrator()    
+    regions = orchestrator.get_regions_list()
     # Produce data
-    orchestrator = Orchestrator().start(name, regions)    
+    orchestrator.start(name, regions)    
                                         
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
