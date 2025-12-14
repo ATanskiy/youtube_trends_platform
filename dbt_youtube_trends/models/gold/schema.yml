@@ -1,70 +1,111 @@
 version: 2
 
 models:
-  - name: dim_users
-    description: "Denormalized user dimension combining identity, contact, pictures, geography, and metadata for BI dashboards."
+
+  - name: videos_enriched
+    description: >
+      Gold-level enriched fact table for YouTube videos.
+      Combines snapshot-level engagement metrics and growth
+      with descriptive attributes from all dimension tables.
+      Each row represents a video in a specific region at a specific snapshot time.
+
     columns:
 
-      - name: user_id
-        description: "Primary unique identifier for each user."
-        tests: [not_null, unique]
+      # ============================
+      # KEYS
+      # ============================
 
-      - name: gender
-        description: "User’s reported gender."
+      - name: video_id
+        description: Unique YouTube video identifier
+        tests:
+          - not_null
 
-      - name: first_name
-        description: "User’s first name."
+      - name: region_id
+        description: Region (country) identifier
+        tests:
+          - not_null
 
-      - name: last_name
-        description: "User’s last name."
+      - name: language_id
+        description: Language identifier of the video
 
-      - name: full_name
-        description: "Convenience field: first name + last name."
+      - name: channel_id
+        description: Channel identifier owning the video
 
-      - name: email
-        description: "Email address."
+      - name: category_id
+        description: Category identifier of the video
 
-      - name: phone
-        description: "Primary phone number."
+      # ============================
+      # TIME
+      # ============================
 
-      - name: cell
-        description: "Secondary mobile number."
+      - name: snapshot_at
+        description: Timestamp representing when the metrics snapshot was taken
+        tests:
+          - not_null
 
-      - name: picture_large
-        description: "High-resolution profile picture."
+      - name: snapshot_date
+        description: Date (derived from snapshot_at) used for aggregation
 
-      - name: picture_medium
-        description: "Medium-resolution profile picture."
+      - name: video_published_at
+        description: Date when the video was originally published
 
-      - name: picture_thumbnail
-        description: "Thumbnail-sized profile picture."
+      # ============================
+      # METRICS (ABSOLUTE)
+      # ============================
 
-      - name: city
-        description: "User’s city."
+      - name: view_count
+        description: Total view count at snapshot time
 
-      - name: state
-        description: "User’s state or region name."
+      - name: like_count
+        description: Total like count at snapshot time
 
-      - name: state_id
-        description: "State abbreviation (e.g., CA)."
+      - name: favorite_count
+        description: Total favorite count at snapshot time
 
-      - name: postcode
-        description: "Postal code."
+      - name: comment_count
+        description: Total comment count at snapshot time
 
-      - name: latitude
-        description: "Latitude coordinate."
+      # ============================
+      # METRICS (GROWTH)
+      # ============================
 
-      - name: longitude
-        description: "Longitude coordinate."
+      - name: view_growth
+        description: Change in view count since previous snapshot for the same video and region
 
-      - name: created_at
-        description: "Timestamp when source system created the user."
+      - name: like_growth
+        description: Change in like count since previous snapshot for the same video and region
 
-      - name: inserted_at
-        description: "Timestamp when bronze layer ingested the event."
+      - name: favorite_growth
+        description: Change in favorite count since previous snapshot for the same video and region
 
-      - name: age
-        description: "User age derived from created_at."
+      - name: comment_growth
+        description: Change in comment count since previous snapshot for the same video and region
 
-      - name: region_group
-        description: "Custom grouping of states for dashboard filtering."
+      # ============================
+      # VIDEO ATTRIBUTES
+      # ============================
+
+      - name: title
+        description: Video title
+
+      - name: description
+        description: Video description
+
+      - name: duration
+        description: Video duration in ISO-8601 format
+
+      # ============================
+      # DIMENSION ATTRIBUTES
+      # ============================
+
+      - name: channel_title
+        description: Display name of the YouTube channel
+
+      - name: category_name
+        description: Human-readable video category name
+
+      - name: language_name
+        description: Human-readable language name
+
+      - name: region_name
+        description: Human-readable region name
