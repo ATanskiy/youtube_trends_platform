@@ -2,118 +2,156 @@ version: 2
 
 models:
 
-  # ============================================================
-  # USERS (core identity information)
-  # ============================================================
-  - name: users
-    description: "Core user identity fields extracted from JSON."
+  # ============================
+  # DIMENSIONS
+  # ============================
+
+  - name: dim_videos
+    description: >
+      Video-level dimension table.
+      Contains static metadata about each YouTube video.
     columns:
-      - name: user_id
-        description: "Primary unique identifier of the user."
-        tests: [not_null, unique]
+      - name: video_id
+        description: Unique YouTube video identifier
+        tests:
+          - not_null
+      - name: title
+        description: Video title
+      - name: description
+        description: Video description
+      - name: duration
+        description: Video duration in ISO-8601 format
+      - name: published_at
+        description: Date the video was published
+      - name: category_id
+        description: Category identifier of the video
+      - name: channel_id
+        description: Channel identifier that owns the video
 
-      - name: gender
-        description: "User’s gender as reported in the event payload."
-
-      - name: first_name
-        description: "User’s given name."
-
-      - name: last_name
-        description: "User’s family name."
-
-      - name: inserted_at
-        description: "Timestamp when the raw event was inserted into the bronze table."
-
-  # ============================================================
-  # USERS_CONTACT
-  # ============================================================
-  - name: users_contact
-    description: "User contact information including email and phone numbers."
+  - name: dim_channels
+    description: >
+      Channel dimension table.
+      Contains metadata about YouTube channels.
     columns:
-      - name: user_id
-        description: "Foreign key tying contact data to the main user table."
-        tests: [not_null, unique]
+      - name: channel_id
+        description: Unique YouTube channel identifier
+        tests:
+          - not_null
+      - name: channel_title
+        description: Channel display name
+      - name: updated_at
+        description: Timestamp when the channel record was last updated
 
-      - name: email
-        description: "User’s email address."
-
-      - name: phone
-        description: "Primary telephone number."
-
-      - name: cell
-        description: "Secondary or mobile phone number."
-
-      - name: inserted_at
-        description: "Timestamp when the raw event was inserted."
-
-  # ============================================================
-  # USERS_PICTURE
-  # ============================================================
-  - name: users_picture
-    description: "Profile picture URLs for various resolutions."
+  - name: dim_categories
+    description: >
+      Video category dimension table.
+      Maps category IDs to human-readable names.
     columns:
-      - name: user_id
-        description: "Foreign key tying picture data to the main user table."
-        tests: [not_null, unique]
-
-      - name: picture_large
-        description: "URL of the high-resolution profile picture."
-
-      - name: picture_medium
-        description: "URL of the medium-resolution profile picture."
-
-      - name: picture_thumbnail
-        description: "URL of the thumbnail profile picture."
-
-      - name: inserted_at
-        description: "Timestamp when the raw event was inserted."
-
-  # ============================================================
-  # USERS_GEO
-  # ============================================================
-  - name: users_geo
-    description: "Geographical attributes associated with the user."
-    columns:
-      - name: user_id
-        description: "Foreign key tying location data to the main user table."
-        tests: [not_null, unique]
-
-      - name: city
-        description: "City where the user is located."
-
-      - name: state
-        description: "Name of the state or region."
-
-      - name: state_id
-        description: "State code (e.g. CA for California)."
-
-      - name: postcode
-        description: "Postal code."
-
-      - name: latitude
-        description: "Latitude coordinate of the user’s location."
-
-      - name: longitude
-        description: "Longitude coordinate of the user’s location."
-
-      - name: inserted_at
-        description: "Timestamp when the raw event was inserted."
-
-  # ============================================================
-  # USERS_METADATA
-  # ============================================================
-  - name: users_metadata
-    description: "Additional metadata including timestamps and sensitive attributes."
-    columns:
-      - name: user_id
-        description: "Foreign key tying metadata to the main user table."
-        tests: [not_null, unique]
-
+      - name: category_id
+        description: Unique category identifier
+        tests:
+          - not_null
+      - name: category_name
+        description: Category name
       - name: created_at
-        description: "Timestamp embedded inside the JSON indicating when the user object was created upstream."
+        description: Timestamp when the category was first ingested
 
-      - name: password
-        description: "Password value from source JSON (not recommended for analytical storage)."
+  - name: dim_languages
+    description: >
+      Language dimension table.
+      Represents the detected or declared language of a video.
+    columns:
+      - name: language_id
+        description: Language code (ISO-style)
+        tests:
+          - not_null
+      - name: language_name
+        description: Human-readable language name
+      - name: created_at
+        description: Timestamp when the language was first ingested
 
-      - name: inserted_at
-        description: "Timestamp when the raw event was inserted."
+  - name: dim_regions
+    description: >
+      Region dimension table.
+      Represents the country/region where the video is trending.
+    columns:
+      - name: region_id
+        description: Region identifier (country code)
+        tests:
+          - not_null
+      - name: region_name
+        description: Human-readable region name
+      - name: created_at
+        description: Timestamp when the region was first ingested
+
+  # ============================
+  # FACT TABLES
+  # ============================
+
+  - name: fct_videos
+    description: >
+      Snapshot fact table containing raw engagement metrics for videos.
+      Each row represents the state of a video in a specific region at a specific snapshot time.
+    columns:
+      - name: video_id
+        description: Video identifier
+        tests:
+          - not_null
+      - name: region_id
+        description: Region identifier
+        tests:
+          - not_null
+      - name: language_id
+        description: Language identifier
+      - name: channel_id
+        description: Channel identifier
+      - name: category_id
+        description: Category identifier
+      - name: published_at
+        description: Video publish date
+      - name: snapshot_at
+        description: Snapshot date for the metrics
+        tests:
+          - not_null
+      - name: view_count
+        description: Total view count at snapshot time
+      - name: like_count
+        description: Total like count at snapshot time
+      - name: favorite_count
+        description: Total favorite count at snapshot time
+      - name: comment_count
+        description: Total comment count at snapshot time
+
+  - name: fct_videos_growth
+    description: >
+      Derived fact table that calculates growth deltas between snapshots.
+      Growth is calculated per video and region over time.
+    columns:
+      - name: video_id
+        description: Video identifier
+        tests:
+          - not_null
+      - name: region_id
+        description: Region identifier
+        tests:
+          - not_null
+      - name: snapshot_at
+        description: Snapshot date
+        tests:
+          - not_null
+      - name: view_count
+        description: Total view count at snapshot time
+      - name: like_count
+        description: Total like count at snapshot time
+      - name: favorite_count
+        description: Total favorite count at snapshot time
+      - name: comment_count
+        description: Total comment count at snapshot time
+      - name: view_growth
+        description: Change in view count since previous snapshot
+      - name: like_growth
+        description: Change in like count since previous snapshot
+      - name: favorite_growth
+        description: Change in favorite count since previous snapshot
+      - name: comment_growth
+        description: Change in comment count since previous snapshot
