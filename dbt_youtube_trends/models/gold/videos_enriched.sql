@@ -15,8 +15,7 @@ SELECT
     g.category_id,
 
     -- time
-    g.snapshot_at,
-    DATE(g.snapshot_at) AS snapshot_date,
+    g.snapshot_at        AS video_snapshot_at,
     v.published_at       AS video_published_at,
 
     -- metrics (absolute)
@@ -42,7 +41,9 @@ SELECT
     -- dimensions
     c.category_name,
     l.language_name,
-    r.region_name
+    r.region_name,
+    rg.latitude,
+    rg.longitude
 
 FROM {{ ref('fct_videos_growth') }} g
 
@@ -60,3 +61,6 @@ LEFT JOIN {{ ref('dim_languages') }} l
 
 LEFT JOIN {{ ref('dim_regions') }} r
     ON g.region_id = r.region_id
+
+LEFT JOIN {{ ref('dim_regions_geo') }} rg
+    ON g.region_id = rg.region_id
