@@ -28,3 +28,7 @@ models:
       +materialized: table
       +file_format: iceberg
       +table_type: iceberg
+
+seeds:
+  youtube_trends_platform:
+    +full_refresh: true
