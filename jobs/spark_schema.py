@@ -10,9 +10,17 @@ class SparkSchema:
         ])
 
     @staticmethod
-    def category_schema() -> StructType:
+    def language_schema() -> StructType:
         return StructType([
             StructField("id", StringType(), True),
+            StructField("name", StringType(), True),            
+            StructField("created_at", StringType(), True)
+        ])
+    
+    @staticmethod
+    def category_schema() -> StructType:
+        return StructType([
+            StructField("id", IntegerType(), True),
             StructField("name", StringType(), True),
             StructField("created_at", StringType(), True)
         ])
@@ -24,10 +32,12 @@ class SparkSchema:
             StructField("title", StringType(), True),
             StructField("description", StringType(), True),
             StructField("region_id", StringType(), True),
+            StructField("language_id", StringType(), True),
+            StructField("language_id_src", StringType(), True),
             StructField("published_at", StringType(), True),            
             StructField("channel_id", StringType(), True),
             StructField("channel_title", StringType(), True),
-            StructField("category_id", StringType(), True),
+            StructField("category_id", IntegerType(), True),
             StructField("duration", StringType(), True),
             StructField("view_count", IntegerType(), True),
             StructField("like_count", IntegerType(), True),

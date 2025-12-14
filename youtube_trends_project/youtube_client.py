@@ -29,6 +29,11 @@ class YouTubeClient:
         for item in data.get("items", []):
             yield item
 
+    def get_languages(self, part: str = "snippet") -> Iterable[Dict[str, Any]]:
+        data = self._get("i18nLanguages", {"part": part})
+        for item in data.get("items", []):
+            yield item
+
     def get_video_categories(self, region_code: str = "US", part: str = "snippet") -> Iterable[Dict[str, Any]]:
         data = self._get("videoCategories", {"part": part, "regionCode": region_code})
         for item in data.get("items", []):
