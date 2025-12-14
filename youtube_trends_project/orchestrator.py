@@ -76,7 +76,7 @@ class Orchestrator:
             region_dict = {}                        
             region_dict["id"] = region.get("id")
             region_dict["name"] = region.get("snippet").get("name")            
-            region_dict["created_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
+            region_dict["created_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
             self.kafka_producer.send(KAFKA_TOPIC_REGIONS, region.get("id"), region_dict)
 
     def produce_languages(self):              
@@ -85,7 +85,7 @@ class Orchestrator:
             language_dict = {}                        
             language_dict["id"] = language.get("id")
             language_dict["name"] = language.get("snippet").get("name")            
-            language_dict["created_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
+            language_dict["created_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
             self.kafka_producer.send(KAFKA_TOPIC_LANGUAGES, language.get("id"), language_dict)        
 
 
@@ -95,7 +95,7 @@ class Orchestrator:
                 category_dict = {}            
                 category_dict["id"] = int(category.get("id"), 0)
                 category_dict["name"] = category.get("snippet")["title"]
-                category_dict["created_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
+                category_dict["created_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
                 self.kafka_producer.send(KAFKA_TOPIC_CATEGORIES, category.get("id"), category_dict)       
 
 
@@ -126,7 +126,7 @@ class Orchestrator:
                 video_dict["like_count"] = int(statistics.get("likeCount", 0))
                 video_dict["favorite_count"] = int(statistics.get("favoriteCount", 0))
                 video_dict["comment_count"] = int(statistics.get("commentCount", 0))
-                video_dict["created_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
+                video_dict["created_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
                 self.kafka_producer.send(KAFKA_TOPIC_VIDEOS, video.get("id"), video_dict)
 
 
