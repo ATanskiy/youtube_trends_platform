@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: bronze
+    schema: bronze
+    tables:
+      - name: categories
+        description: "YouTube category reference data ingested into bronze."
+      - name: languages
+        description: "YouTube language reference data ingested into bronze."
+      - name: regions
+        description: "YouTube region reference data ingested into bronze."
+      - name: videos
+        description: "Raw videos ingested into bronze."

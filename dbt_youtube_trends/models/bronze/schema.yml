@@ -1,0 +1,81 @@
+version: 2
+
+schemas:
+  - name: bronze
+    description: >
+      Bronze layer for YouTube Trends data.
+      Contains raw, minimally transformed data ingested from external sources.
+      Data in this layer is append-only and represents the earliest point in the pipeline.
+
+    tables:
+      - name: categories
+        description: >
+          Raw list of YouTube video categories.
+          Used to map category IDs to human-readable names.
+        columns:
+          - name: id
+            description: Unique identifier of the category (YouTube category ID).
+          - name: name
+            description: Name of the video category.
+          - name: created_at
+            description: Timestamp when the record was ingested into the bronze layer.
+
+      - name: languages
+        description: >
+          Raw list of languages detected or associated with YouTube videos.
+        columns:
+          - name: id
+            description: Unique identifier of the language.
+          - name: name
+            description: Human-readable language name.
+          - name: created_at
+            description: Timestamp when the record was ingested into the bronze layer.
+
+      - name: regions
+        description: >
+          Raw list of regions (countries) used for YouTube trending data.
+        columns:
+          - name: id
+            description: Unique identifier of the region (region code).
+          - name: name
+            description: Human-readable region name.
+          - name: created_at
+            description: Timestamp when the record was ingested into the bronze layer.
+
+      - name: videos
+        description: >
+          Raw YouTube trending videos data.
+          Contains video metadata and engagement metrics as ingested from the API.
+        columns:
+          - name: id
+            description: Unique YouTube video identifier.
+          - name: title
+            description: Video title.
+          - name: description
+            description: Video description text.
+          - name: region_id
+            description: Region identifier where the video is trending.
+          - name: language_id
+            description: Normalized language identifier associated with the video.
+          - name: language_id_src
+            description: Original language identifier as received from the source API.
+          - name: published_at
+            description: Timestamp when the video was originally published on YouTube.
+          - name: channel_id
+            description: Unique identifier of the YouTube channel.
+          - name: channel_title
+            description: Name of the YouTube channel.
+          - name: category_id
+            description: Category identifier of the video.
+          - name: duration
+            description: Duration of the video (ISO 8601 or parsed format, depending on ingestion).
+          - name: view_count
+            description: Number of views at the time of ingestion.
+          - name: like_count
+            description: Number of likes at the time of ingestion.
+          - name: favorite_count
+            description: Number of times the video was favorited (if provided by the API).
+          - name: comment_count
+            description: Number of comments at the time of ingestion.
+          - name: created_at
+            description: Timestamp when the record was ingested into the bronze layer.
