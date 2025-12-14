@@ -1,4 +1,5 @@
 import json
+import random
 import isodate
 from datetime import datetime, timezone
 import pandas as pd
@@ -8,6 +9,10 @@ from kafka_producer import KafkaProducerService
 from settings import (
     YOUTUBE_API_KEY,
     KAFKA_BOOTSTRAP_SERVERS,
+    KAFKA_TOPIC_REGIONS,
+    KAFKA_TOPIC_LANGUAGES,
+    KAFKA_TOPIC_CATEGORIES,
+    KAFKA_TOPIC_VIDEOS
 )
 
 class Orchestrator:
@@ -19,6 +24,8 @@ class Orchestrator:
     def start(self, name:str, regions):
         if name == "regions":
             self.produce_regions() 
+        if name == "languages":
+            self.produce_languages()    
         if name == "categories":
             self.produce_categories(["US"])    
         if name == "videos":
@@ -65,43 +72,62 @@ class Orchestrator:
 
     def produce_regions(self):              
         regions = self.youtube_client.get_regions()        
-        for region in self.youtube_client.get_regions():            
+        for region in regions:
             region_dict = {}                        
             region_dict["id"] = region.get("id")
             region_dict["name"] = region.get("snippet").get("name")            
             region_dict["created_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
-            self.kafka_producer.send("youtube_regions", region.get("id"), region_dict)        
+            self.kafka_producer.send(KAFKA_TOPIC_REGIONS, region.get("id"), region_dict)
+
+    def produce_languages(self):              
+        languages = self.youtube_client.get_languages()        
+        for language in languages:
+            language_dict = {}                        
+            language_dict["id"] = language.get("id")
+            language_dict["name"] = language.get("snippet").get("name")            
+            language_dict["created_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
+            self.kafka_producer.send(KAFKA_TOPIC_LANGUAGES, language.get("id"), language_dict)        
 
 
     def produce_categories(self, regions):
         for region in regions:
             for category in self.youtube_client.get_video_categories(region):                
                 category_dict = {}            
-                category_dict["id"] = category.get("id")
+                category_dict["id"] = int(category.get("id"), 0)
                 category_dict["name"] = category.get("snippet")["title"]
                 category_dict["created_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
-                self.kafka_producer.send("youtube_categories", category.get("id"), category_dict)       
+                self.kafka_producer.send(KAFKA_TOPIC_CATEGORIES, category.get("id"), category_dict)       
 
 
-    def produce_videos(self, regions, max_results=50):
+    def produce_videos(self, regions, max_results=50):        
+        LANGUAGE_FIX_MAP = {
+            "iw": "he",  # Hebrew
+            "ji": "yi",  # Yiddish
+            "in": "id"   # Indonesian
+        }
+
         for region in regions:
             for video in self.youtube_client.get_videos(region, max_results=max_results):
                 video_dict = {}                            
                 video_dict["id"] = video.get("id")
-                video_dict["title"] = video.get("snippet")["localized"]["title"]
-                video_dict["description"] = video.get("snippet").get("localized").get("description")
+                snippet = video.get("snippet", {})
+                video_dict["title"] = snippet.get("localized")["title"]
+                video_dict["description"] = snippet.get("localized")["description"]
                 video_dict["region_id"] = region
-                video_dict["published_at"] = video.get("snippet")["publishedAt"]
-                video_dict["channel_id"] = video.get("snippet")["channelId"]
-                video_dict["channel_title"] = video.get("snippet")["channelTitle"]
-                video_dict["category_id"] = video.get("snippet")["categoryId"]
+                video_dict["language_id"] =  snippet.get("defaultAudioLanguage") or snippet.get("audioLanguage")  or "und"
+                video_dict["language_id_src"] =  (snippet.get("defaultAudioLanguage") or snippet.get("audioLanguage")  or "und").split("-")[0]
+                video_dict["published_at"] = snippet.get("publishedAt") 
+                video_dict["channel_id"] = snippet.get("channelId")
+                video_dict["channel_title"] = snippet.get("channelTitle")
+                video_dict["category_id"] = int(snippet.get("categoryId"), 0)
                 video_dict["duration"] = str(isodate.parse_duration(video.get("contentDetails")["duration"]))
-                video_dict["view_count"] =   int(video.get("statistics")["viewCount"])
-                video_dict["like_count"] = int(video.get("statistics")["likeCount"])
-                video_dict["favorite_count"] = int(video.get("statistics")["favoriteCount"])
-                video_dict["comment_count"] = int(video.get("statistics")["commentCount"])
+                statistics = video.get("statistics", {})
+                video_dict["view_count"] =   int(statistics.get("viewCount", 0))
+                video_dict["like_count"] = int(statistics.get("likeCount", 0))
+                video_dict["favorite_count"] = int(statistics.get("favoriteCount", 0))
+                video_dict["comment_count"] = int(statistics.get("commentCount", 0))
                 video_dict["created_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
-                self.kafka_producer.send("youtube_videos", video.get("id"), video_dict)
+                self.kafka_producer.send(KAFKA_TOPIC_VIDEOS, video.get("id"), video_dict)
 
 
     def produce_comments(self, video_ids):        
