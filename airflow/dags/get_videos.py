@@ -5,7 +5,7 @@ from airflow.operators.bash import BashOperator
 CONTAINER_NAME = "python_youtube_trends"
 
 with DAG(
-    dag_id="get_videos",
+    dag_id="consume_videos",
     description="Conduct an API call to get YouTube video regions",
     start_date=datetime(2025, 1, 1),
     schedule=None,

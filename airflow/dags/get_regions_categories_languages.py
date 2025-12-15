@@ -15,7 +15,7 @@ def api_task(name: str) -> BashOperator:
     )
 
 with DAG(
-    dag_id="youtube_trends_reference_api",
+    dag_id="consume_regions_categories_languages",
     description="Fetch YouTube reference data via API",
     start_date=datetime(2025, 1, 1),
     schedule=None,
