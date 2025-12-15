@@ -31,4 +31,9 @@ models:
 
 seeds:
   youtube_trends_platform:
-    +full_refresh: true
+    dim_regions_geo:
+      +column_types:
+        region_id: string
+        region_name: string
+        latitude: double
+        longitude: double

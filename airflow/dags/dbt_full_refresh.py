@@ -46,4 +46,19 @@ with DAG(
         """
     )
 
-    drop_seeds >> dbt_seed >> dbt_run
+    generate_docs = BashOperator(
+        task_id="generate_dbt_docs",
+        bash_command=f"""
+            docker exec {DBT_CONTAINER} \
+            dbt docs generate --project-dir {PROJECT_DIR}
+        """
+    )
+
+    fix_docs = BashOperator(
+        task_id="fix_docs_database",
+        bash_command="""
+            docker exec dbt_spark /scripts/fix_dbt_docs_database.sh
+        """,
+    )
+
+    drop_seeds >> dbt_seed >> dbt_run >> generate_docs >> fix_docs

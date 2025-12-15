@@ -1,0 +1,34 @@
+version: 2
+
+seeds:
+  - name: dim_regions_geo
+    description: >
+      Static geographic reference table containing latitude and longitude
+      for each region. Used for maps, geo dashboards, and spatial analysis
+      in Grafana.
+
+    columns:
+      - name: region_id
+        description: >
+          ISO 3166-1 alpha-2 region code (e.g. US, FR, IL).
+        tests:
+          - not_null
+          - unique
+
+      - name: region_name
+        description: >
+          Official English name of the region or country.
+        tests:
+          - not_null
+
+      - name: latitude
+        description: >
+          Latitude coordinate of the region centroid.
+        tests:
+          - not_null
+
+      - name: longitude
+        description: >
+          Longitude coordinate of the region centroid.
+        tests:
+          - not_null

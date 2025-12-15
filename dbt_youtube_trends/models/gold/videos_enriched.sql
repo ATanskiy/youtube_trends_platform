@@ -12,7 +12,7 @@ SELECT
     g.category_id,
 
     g.snapshot_at        AS video_snapshot_at,
-    v.published_at       AS video_published_at,
+    g.published_at       AS video_published_at,
 
     g.view_count,
     g.like_count,
