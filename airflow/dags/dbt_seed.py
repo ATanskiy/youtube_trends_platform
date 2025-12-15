@@ -37,7 +37,7 @@ with DAG(
                 echo '--- Running dbt ---';
                 docker exec {DBT_CONTAINER} \
                     dbt seed --project-dir {PROJECT_DIR}
-            ) || true
+            )
         """
     )
 
