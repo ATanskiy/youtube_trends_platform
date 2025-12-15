@@ -155,8 +155,8 @@ services:
       - envs/.env.airflow
     volumes:
       - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
+      - ./volumes/.airflow_logs:/opt/airflow/logs
       - ./jobs:/opt/airflow/jobs
       - ./docker/scripts/airflow/airflow_scheduler_entrypoint.sh:/opt/airflow/airflow_scheduler_entrypoint.sh
       - /var/run/docker.sock:/var/run/docker.sock
@@ -183,8 +183,8 @@ services:
       - envs/.env.airflow
     volumes:
       - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
+      - ./volumes/.airflow_logs:/opt/airflow/logs
       - ./jobs:/opt/airflow/jobs
       - ./docker/scripts/airflow/airflow_webserver_entrypoint.sh:/opt/airflow/airflow_webserver_entrypoint.sh
       - /var/run/docker.sock:/var/run/docker.sock
@@ -292,6 +292,9 @@ services:
     container_name: dbt_spark
     volumes:
       - ./dbt_youtube_trends:/workspace
+      - ./volumes/.dbt/dbt_docs:/workspace/target
+      - ./volumes/.dbt/dbt_logs:/workspace/logs
+      - ./docker/scripts/dbt:/scripts
     environment:
       DBT_PROFILES_DIR: /workspace
     networks:
@@ -300,6 +303,15 @@ services:
       - spark_thriftserver
     tty: true
     stdin_open: true
+
+  dbt_docs_server:
+    image: nginx:alpine
+    container_name: dbt_docs
+    ports:
+      - "8088:80"
+    volumes:
+      - ./volumes/.dbt/dbt_docs:/usr/share/nginx/html:ro
+    restart: unless-stopped
 
   # Grafana
   grafana:

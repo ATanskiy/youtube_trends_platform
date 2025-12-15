@@ -2,156 +2,157 @@ version: 2
 
 models:
 
-  # ============================
+  # =========================
   # DIMENSIONS
-  # ============================
-
-  - name: dim_videos
-    description: >
-      Video-level dimension table.
-      Contains static metadata about each YouTube video.
-    columns:
-      - name: video_id
-        description: Unique YouTube video identifier
-        tests:
-          - not_null
-      - name: title
-        description: Video title
-      - name: description
-        description: Video description
-      - name: duration
-        description: Video duration in ISO-8601 format
-      - name: published_at
-        description: Date the video was published
-      - name: category_id
-        description: Category identifier of the video
-      - name: channel_id
-        description: Channel identifier that owns the video
-
-  - name: dim_channels
-    description: >
-      Channel dimension table.
-      Contains metadata about YouTube channels.
-    columns:
-      - name: channel_id
-        description: Unique YouTube channel identifier
-        tests:
-          - not_null
-      - name: channel_title
-        description: Channel display name
-      - name: updated_at
-        description: Timestamp when the channel record was last updated
+  # =========================
 
   - name: dim_categories
-    description: >
-      Video category dimension table.
-      Maps category IDs to human-readable names.
+    description: "YouTube video categories reference table."
     columns:
       - name: category_id
-        description: Unique category identifier
+        description: "Unique identifier of the YouTube category."
         tests:
           - not_null
+          - unique
       - name: category_name
-        description: Category name
+        description: "Human-readable category name."
       - name: created_at
-        description: Timestamp when the category was first ingested
+        description: "Timestamp when the category was created in the source."
+
+  - name: dim_channels
+    description: "Latest known channel metadata derived from videos."
+    columns:
+      - name: channel_id
+        description: "Unique identifier of the YouTube channel."
+        tests:
+          - not_null
+          - unique
+      - name: channel_title
+        description: "Channel display name."
+      - name: updated_at
+        description: "Most recent timestamp the channel appeared in the source data."
 
   - name: dim_languages
-    description: >
-      Language dimension table.
-      Represents the detected or declared language of a video.
+    description: "Languages reference table."
     columns:
       - name: language_id
-        description: Language code (ISO-style)
+        description: "ISO language identifier."
         tests:
           - not_null
       - name: language_name
-        description: Human-readable language name
+        description: "Human-readable language name."
       - name: created_at
-        description: Timestamp when the language was first ingested
+        description: "Timestamp when the language was created in the source."
 
   - name: dim_regions
-    description: >
-      Region dimension table.
-      Represents the country/region where the video is trending.
+    description: "YouTube regions reference table."
     columns:
       - name: region_id
-        description: Region identifier (country code)
+        description: "ISO country/region code."
         tests:
           - not_null
+          - unique
       - name: region_name
-        description: Human-readable region name
+        description: "Human-readable region name."
       - name: created_at
-        description: Timestamp when the region was first ingested
+        description: "Timestamp when the region was created in the source."
 
-  # ============================
-  # FACT TABLES
-  # ============================
-
-  - name: fct_videos
-    description: >
-      Snapshot fact table containing raw engagement metrics for videos.
-      Each row represents the state of a video in a specific region at a specific snapshot time.
+  - name: dim_videos
+    description: "Video-level attributes that do not change frequently."
     columns:
       - name: video_id
-        description: Video identifier
+        description: "Unique YouTube video identifier."
+        tests:
+          - not_null
+      - name: title
+        description: "Video title."
+      - name: description
+        description: "Video description."
+      - name: duration
+        description: "Video duration in ISO-8601 format."
+      - name: published_at
+        description: "Timestamp when the video was published."
+      - name: category_id
+        description: "Category ID associated with the video."
+      - name: channel_id
+        description: "Channel ID that published the video."
+
+  # =========================
+  # FACT TABLES
+  # =========================
+
+  - name: fct_videos
+    description: "Snapshot fact table containing absolute engagement metrics per video and region."
+    columns:
+      - name: video_id
+        description: "Unique YouTube video identifier."
         tests:
           - not_null
       - name: region_id
-        description: Region identifier
+        description: "Region where the metrics were collected."
         tests:
           - not_null
       - name: language_id
-        description: Language identifier
+        description: "Normalized language identifier."
+      - name: language_id_src
+        description: "Raw language identifier from the API."
       - name: channel_id
-        description: Channel identifier
+        description: "Channel ID that published the video."
       - name: category_id
-        description: Category identifier
+        description: "Category ID associated with the video."
       - name: published_at
-        description: Video publish date
+        description: "Timestamp when the video was published."
       - name: snapshot_at
-        description: Snapshot date for the metrics
+        description: "Timestamp when the metrics snapshot was taken."
         tests:
           - not_null
       - name: view_count
-        description: Total view count at snapshot time
+        description: "Total number of views at snapshot time."
       - name: like_count
-        description: Total like count at snapshot time
+        description: "Total number of likes at snapshot time."
       - name: favorite_count
-        description: Total favorite count at snapshot time
+        description: "Total number of favorites at snapshot time."
       - name: comment_count
-        description: Total comment count at snapshot time
+        description: "Total number of comments at snapshot time."
 
   - name: fct_videos_growth
-    description: >
-      Derived fact table that calculates growth deltas between snapshots.
-      Growth is calculated per video and region over time.
+    description: "Derived fact table computing growth metrics between snapshots."
     columns:
       - name: video_id
-        description: Video identifier
+        description: "Unique YouTube video identifier."
         tests:
           - not_null
       - name: region_id
-        description: Region identifier
+        description: "Region where the metrics were collected."
         tests:
           - not_null
+      - name: language_id
+        description: "Normalized language identifier."
+      - name: language_id_src
+        description: "Raw language identifier from the API."
+      - name: channel_id
+        description: "Channel ID that published the video."
+      - name: category_id
+        description: "Category ID associated with the video."
+      - name: published_at
+        description: "Timestamp when the video was published."
       - name: snapshot_at
-        description: Snapshot date
+        description: "Timestamp of the snapshot."
         tests:
           - not_null
       - name: view_count
-        description: Total view count at snapshot time
+        description: "Total views at snapshot time."
       - name: like_count
-        description: Total like count at snapshot time
+        description: "Total likes at snapshot time."
       - name: favorite_count
-        description: Total favorite count at snapshot time
+        description: "Total favorites at snapshot time."
       - name: comment_count
-        description: Total comment count at snapshot time
+        description: "Total comments at snapshot time."
       - name: view_growth
-        description: Change in view count since previous snapshot
+        description: "Delta in views compared to the previous snapshot."
       - name: like_growth
-        description: Change in like count since previous snapshot
+        description: "Delta in likes compared to the previous snapshot."
       - name: favorite_growth
-        description: Change in favorite count since previous snapshot
+        description: "Delta in favorites compared to the previous snapshot."
       - name: comment_growth
-        description: Change in comment count since previous snapshot
+        description: "Delta in comments compared to the previous snapshot."

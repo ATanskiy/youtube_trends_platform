@@ -16,7 +16,7 @@ WITH ranked AS (
         channel_id,
         ROW_NUMBER() OVER (
             PARTITION BY id
-            ORDER BY created_at DESC
+            ORDER BY CAST(created_at AS TIMESTAMP) DESC
         ) AS rn
     FROM {{ source('bronze', 'videos') }}
 )

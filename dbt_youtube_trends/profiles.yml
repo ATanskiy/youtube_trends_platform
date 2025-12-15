@@ -7,6 +7,6 @@ youtube_trends_platform:
       host: spark_thriftserver
       port: 10001
       catalog: youtube_trends
-      schema: youtube_trends.silver
+      schema: silver
       threads: 10
       auth: NOSASL

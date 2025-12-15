@@ -21,8 +21,8 @@ WITH src AS (
         CAST(like_count AS BIGINT)      AS like_count,
         CAST(favorite_count AS BIGINT)  AS favorite_count,
         CAST(comment_count AS BIGINT)   AS comment_count,
-        published_at,
-        created_at                      AS snapshot_at
+        CAST(published_at AS TIMESTAMP)      AS published_at,
+        CAST(created_at  AS TIMESTAMP)      AS snapshot_at
     FROM {{ source('bronze', 'videos') }}
 )
 
