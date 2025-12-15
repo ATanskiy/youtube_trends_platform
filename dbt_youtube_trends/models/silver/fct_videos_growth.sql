@@ -41,7 +41,7 @@ with_history AS (
         video_id,
         region_id,
         language_id,
-        language_id_src
+        language_id_src,
         channel_id,
         category_id,
         published_at,

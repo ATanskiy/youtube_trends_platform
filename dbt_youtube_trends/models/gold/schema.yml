@@ -1,111 +1,86 @@
 version: 2
 
 models:
-
   - name: videos_enriched
     description: >
-      Gold-level enriched fact table for YouTube videos.
-      Combines snapshot-level engagement metrics and growth
-      with descriptive attributes from all dimension tables.
-      Each row represents a video in a specific region at a specific snapshot time.
+      Gold-level enriched fact table combining video snapshots, engagement metrics,
+      growth deltas, descriptive metadata, language normalization, and geographic context.
+      Designed for analytics and visualization (Grafana, BI tools).
 
     columns:
-
-      # ============================
-      # KEYS
-      # ============================
-
       - name: video_id
-        description: Unique YouTube video identifier
-        tests:
-          - not_null
+        description: Unique identifier of the YouTube video
 
       - name: region_id
-        description: Region (country) identifier
-        tests:
-          - not_null
+        description: Region code where the video was trending
 
       - name: language_id
-        description: Language identifier of the video
+        description: Normalized language identifier (ISO-based)
+
+      - name: language_id_src
+        description: Raw language code as received from the YouTube API
 
       - name: channel_id
-        description: Channel identifier owning the video
+        description: Unique identifier of the channel that published the video
 
       - name: category_id
-        description: Category identifier of the video
+        description: YouTube category identifier of the video
 
-      # ============================
-      # TIME
-      # ============================
-
-      - name: snapshot_at
-        description: Timestamp representing when the metrics snapshot was taken
-        tests:
-          - not_null
-
-      - name: snapshot_date
-        description: Date (derived from snapshot_at) used for aggregation
+      - name: video_snapshot_at
+        description: Timestamp when the video metrics snapshot was collected
 
       - name: video_published_at
-        description: Date when the video was originally published
-
-      # ============================
-      # METRICS (ABSOLUTE)
-      # ============================
+        description: Original publication timestamp of the video
 
       - name: view_count
-        description: Total view count at snapshot time
+        description: Total number of views at the snapshot time
 
       - name: like_count
-        description: Total like count at snapshot time
+        description: Total number of likes at the snapshot time
 
       - name: favorite_count
-        description: Total favorite count at snapshot time
+        description: Total number of favorites at the snapshot time
 
       - name: comment_count
-        description: Total comment count at snapshot time
-
-      # ============================
-      # METRICS (GROWTH)
-      # ============================
+        description: Total number of comments at the snapshot time
 
       - name: view_growth
-        description: Change in view count since previous snapshot for the same video and region
+        description: Increase in views compared to the previous snapshot for the same video and region
 
       - name: like_growth
-        description: Change in like count since previous snapshot for the same video and region
+        description: Increase in likes compared to the previous snapshot for the same video and region
 
       - name: favorite_growth
-        description: Change in favorite count since previous snapshot for the same video and region
+        description: Increase in favorites compared to the previous snapshot for the same video and region
 
       - name: comment_growth
-        description: Change in comment count since previous snapshot for the same video and region
-
-      # ============================
-      # VIDEO ATTRIBUTES
-      # ============================
+        description: Increase in comments compared to the previous snapshot for the same video and region
 
       - name: title
-        description: Video title
+        description: Title of the video
 
       - name: description
-        description: Video description
+        description: Description text of the video
 
       - name: duration
-        description: Video duration in ISO-8601 format
-
-      # ============================
-      # DIMENSION ATTRIBUTES
-      # ============================
+        description: Duration of the video in ISO 8601 format
 
       - name: channel_title
-        description: Display name of the YouTube channel
+        description: Human-readable name of the channel
 
       - name: category_name
-        description: Human-readable video category name
+        description: Human-readable name of the video category
 
       - name: language_name
-        description: Human-readable language name
+        description: >
+          Resolved human-readable language name derived from normalized language data
+          or fallback mapping based on source language code
 
       - name: region_name
         description: Human-readable region name
+
+      - name: latitude
+        description: Latitude of the region (used for geographic visualizations)
+
+      - name: longitude
+        description: Longitude of the region (used for geographic visualizations)
