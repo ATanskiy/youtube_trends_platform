@@ -7,7 +7,7 @@ SPARK_SUBMIT = "/opt/spark/bin/spark-submit"
 JOB_MAIN = "/opt/streaming/jobs/main.py"
 
 with DAG(
-    dag_id="youtube_trends_spark_reference_batch",
+    dag_id="spark_upsert_regions_categories_languages",
     description="Run Spark batch jobs for YouTube reference tables",
     start_date=datetime(2025, 1, 1),
     schedule=None,
