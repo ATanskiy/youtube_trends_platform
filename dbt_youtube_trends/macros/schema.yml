@@ -1,0 +1,19 @@
+version: 2
+
+macros:
+  - name: drop_table_if_exists
+    description: >
+      Drops a table if it exists. Used mainly in full-refresh or recovery workflows.
+    arguments:
+      - name: relation
+        description: Fully qualified table name (schema.table)
+
+  - name: generate_schema_name
+    description: >
+      Custom schema naming logic for dbt models.
+      If a custom schema is provided, it is used; otherwise falls back to target schema.
+    arguments:
+      - name: custom_schema_name
+        description: Optional custom schema override
+      - name: node
+        description: dbt node metadata (unused but required by dbt)
