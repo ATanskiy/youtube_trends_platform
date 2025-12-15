@@ -13,9 +13,9 @@ default_args = {
 
 with DAG(
     dag_id="dbt_run",
-    description="Run dbt models on Spark every 5 minutes",
+    description="Run dbt models on Spark",
     start_date=datetime(2025, 1, 1),
-    schedule=None, #"*/5 * * * *",
+    schedule=None,
     catchup=False,
     default_args=default_args,
     tags=["dbt", "spark", "youtube_trends"],
@@ -23,11 +23,8 @@ with DAG(
 
     dbt_run = BashOperator(
         task_id="dbt_run",
-        bash_command=f"""
-            (
-                echo '--- Running dbt ---';
-                docker exec {DBT_CONTAINER} \
-                    dbt run --project-dir {PROJECT_DIR}
-            ) || true
-        """
+        bash_command=(
+            f"docker exec {DBT_CONTAINER} "
+            f"dbt run --project-dir {PROJECT_DIR}"
+        ),
     )
