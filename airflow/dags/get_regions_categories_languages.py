@@ -1,0 +1,30 @@
+from datetime import datetime
+from airflow import DAG
+from airflow.operators.bash import BashOperator
+
+CONTAINER_NAME = "python_youtube_trends"
+APP_MAIN = "/app/youtube_trends_project/main.py"
+
+def api_task(name: str) -> BashOperator:
+    return BashOperator(
+        task_id=f"get_{name}",
+        bash_command=(
+            f"docker exec {CONTAINER_NAME} "
+            f"python -u {APP_MAIN} --name {name} "
+        ),
+    )
+
+with DAG(
+    dag_id="consume_regions_categories_languages",
+    description="Fetch YouTube reference data via API",
+    start_date=datetime(2025, 1, 1),
+    schedule=None,
+    catchup=False,
+    tags=["youtube_trends", "get_regions", "get_categories", "get_languages"],
+):
+
+    get_regions = api_task("regions")
+    get_categories = api_task("categories")
+    get_languages = api_task("languages")
+
+    get_regions >> get_categories >> get_languages
