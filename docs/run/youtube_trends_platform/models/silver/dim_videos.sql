@@ -1,44 +1,23 @@
 
+    -- back compat for old kwarg name
   
-    
-        create or replace table silver.dim_videos
-      
-      
-    using iceberg
-      
-      
-      
-      
-      
-      
-
-      as
-      
-
-WITH ranked AS (
-    SELECT
-        id AS video_id,
-        title,
-        description,
-        duration,
-        published_at,
-        category_id,
-        channel_id,
-        ROW_NUMBER() OVER (
-            PARTITION BY id
-            ORDER BY CAST(created_at AS TIMESTAMP) DESC
-        ) AS rn
-    FROM bronze.videos
-)
-
-SELECT
-    video_id,
-    title,
-    description,
-    duration,
-    published_at,
-    category_id,
-    channel_id
-FROM ranked
-WHERE rn = 1
   
+  
+      
+          
+          
+      
+  
+
+  
+
+  merge into silver.dim_videos as DBT_INTERNAL_DEST
+      using dim_videos__dbt_tmp as DBT_INTERNAL_SOURCE
+      on 
+              DBT_INTERNAL_SOURCE.video_id = DBT_INTERNAL_DEST.video_id
+          
+
+      when matched then update set
+         * 
+
+      when not matched then insert *

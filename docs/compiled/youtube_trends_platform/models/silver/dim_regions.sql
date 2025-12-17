@@ -4,7 +4,7 @@ WITH src AS (
     SELECT
         id          AS region_id,
         name        AS region_name,
-        created_at
+        CAST(created_at AS TIMESTAMP) AS created_at
     FROM bronze.regions
 )
 
