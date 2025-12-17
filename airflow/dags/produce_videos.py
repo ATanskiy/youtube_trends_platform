@@ -8,7 +8,7 @@ with DAG(
     dag_id="produce_videos",
     description="Conduct an API call to get YouTube video regions",
     start_date=datetime(2025, 1, 1),
-    schedule="@hourly",
+    schedule="*/10 * * * *",
     catchup=False,
     tags=["youtube_trends", "produce_videos"],
 ):

@@ -4,7 +4,7 @@ WITH src AS (
     SELECT
         id          AS category_id,
         name        AS category_name,
-        created_at
+        CAST(created_at AS TIMESTAMP) AS   created_at
     FROM bronze.categories
 )
 

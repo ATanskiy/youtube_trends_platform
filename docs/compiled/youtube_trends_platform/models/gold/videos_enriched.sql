@@ -7,24 +7,21 @@ SELECT
     g.language_id_src,
     g.channel_id,
     g.category_id,
-
     g.snapshot_at        AS video_snapshot_at,
     g.published_at       AS video_published_at,
-
     g.view_count,
     g.like_count,
     g.favorite_count,
     g.comment_count,
 
-    g.view_growth,
-    g.like_growth,
-    g.favorite_growth,
-    g.comment_growth,
+    COALESCE(g.view_growth, 0)     AS view_growth,
+    COALESCE(g.like_growth, 0)     AS like_growth,
+    COALESCE(g.favorite_growth, 0) AS favorite_growth,
+    COALESCE(g.comment_growth, 0)  AS comment_growth,
 
     v.title,
     v.description,
     v.duration,
-
     ch.channel_title,
     c.category_name,
     COALESCE(

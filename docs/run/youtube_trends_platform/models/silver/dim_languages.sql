@@ -1,28 +1,23 @@
 
+    -- back compat for old kwarg name
   
-    
-        create or replace table silver.dim_languages
-      
-      
-    using iceberg
-      
-      
-      
-      
-      
-      
-
-      as
-      
-
-WITH src AS (
-    SELECT
-        id          AS language_id,
-        name        AS language_name,
-        created_at
-    FROM bronze.languages
-)
-
-SELECT *
-FROM src
   
+  
+      
+          
+          
+      
+  
+
+  
+
+  merge into silver.dim_languages as DBT_INTERNAL_DEST
+      using dim_languages__dbt_tmp as DBT_INTERNAL_SOURCE
+      on 
+              DBT_INTERNAL_SOURCE.language_id = DBT_INTERNAL_DEST.language_id
+          
+
+      when matched then update set
+         * 
+
+      when not matched then insert *
