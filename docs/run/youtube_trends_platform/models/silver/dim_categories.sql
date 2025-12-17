@@ -1,0 +1,28 @@
+
+  
+    
+        create or replace table silver.dim_categories
+      
+      
+    using iceberg
+      
+      
+      
+      
+      
+      
+
+      as
+      
+
+WITH src AS (
+    SELECT
+        id          AS category_id,
+        name        AS category_name,
+        created_at
+    FROM bronze.categories
+)
+
+SELECT *
+FROM src
+  

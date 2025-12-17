@@ -15,16 +15,16 @@ def api_task(name: str) -> BashOperator:
     )
 
 with DAG(
-    dag_id="consume_regions_categories_languages",
+    dag_id="produce_regions_categories_languages",
     description="Fetch YouTube reference data via API",
     start_date=datetime(2025, 1, 1),
     schedule=None,
     catchup=False,
-    tags=["youtube_trends", "get_regions", "get_categories", "get_languages"],
+    tags=["youtube_trends", "produce_regions", "produce_categories", "produce_languages"],
 ):
 
-    get_regions = api_task("regions")
-    get_categories = api_task("categories")
-    get_languages = api_task("languages")
+    produce_regions = api_task("regions")
+    produce_categories = api_task("categories")
+    produce_languages = api_task("languages")
 
-    get_regions >> get_categories >> get_languages
+    produce_regions >> produce_categories >> produce_languages
