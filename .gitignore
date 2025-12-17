@@ -2,7 +2,6 @@
 
 volumes
 .venv
-docs
 
 airflow/logs/
 __pycache__/
