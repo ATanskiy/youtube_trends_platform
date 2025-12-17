@@ -292,7 +292,7 @@ services:
     container_name: dbt_spark
     volumes:
       - ./dbt_youtube_trends:/workspace
-      - ./volumes/.dbt/dbt_docs:/workspace/target
+      - ./docs:/workspace/target
       - ./volumes/.dbt/dbt_logs:/workspace/logs
       - ./docker/scripts/dbt:/scripts
     environment:
@@ -310,51 +310,8 @@ services:
     ports:
       - "8088:80"
     volumes:
-      - ./volumes/.dbt/dbt_docs:/usr/share/nginx/html:ro
+      - ./docs:/usr/share/nginx/html:ro
     restart: unless-stopped
-
-  # Grafana
-  grafana:
-    image: grafana/grafana:11.1.0
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    env_file:
-      - envs/.env.grafana
-    volumes:
-      - ./configs/grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
-      - ./configs/grafana/dashboards/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
-      - ./docker/scripts/grafana/install-plugin.sh:/install-plugin.sh
-      - ./volumes/.grafana_data:/var/lib/grafana
-    depends_on:
-      - trino
-    restart: unless-stopped
-    networks:
-      - youtube_trends
-    entrypoint: ["/install-plugin.sh"]
-
-  grafana-exporter:
-    image: alpine:latest
-    container_name: grafana-exporter
-    volumes:
-      - ./configs/grafana/dashboards:/dashboards-export
-      - ./docker/scripts/grafana/export-dashboards.sh:/export-dashboards.sh
-    depends_on:
-      - grafana
-    restart: unless-stopped
-    networks:
-      - youtube_trends
-    command:
-      - /bin/sh
-      - -c
-      - |
-        apk add --no-cache curl jq bash
-        chmod +x /export-dashboards.sh
-        while true; do
-          /export-dashboards.sh
-          sleep 60
-        done
-
 
 networks:
   youtube_trends:
