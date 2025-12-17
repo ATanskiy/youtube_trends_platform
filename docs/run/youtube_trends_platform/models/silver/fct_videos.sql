@@ -1,40 +1,35 @@
 
+    -- back compat for old kwarg name
   
-    
-        create or replace table silver.fct_videos
-      
-      
-    using iceberg
-      
-      
-      
-      
-      
-      
-
-      as
-      
-
-WITH src AS (
-    SELECT
-        id                  AS video_id,
-
-        region_id,
-        language_id,
-        language_id_src,
-
-        channel_id,
-        category_id,
-
-        CAST(view_count AS BIGINT)      AS view_count,
-        CAST(like_count AS BIGINT)      AS like_count,
-        CAST(favorite_count AS BIGINT)  AS favorite_count,
-        CAST(comment_count AS BIGINT)   AS comment_count,
-        CAST(published_at AS TIMESTAMP)      AS published_at,
-        CAST(created_at  AS TIMESTAMP)      AS snapshot_at
-    FROM bronze.videos
-)
-
-SELECT *
-FROM src
   
+  
+      
+          
+              
+              
+          
+              
+              
+          
+              
+              
+          
+      
+  
+
+  
+
+  merge into silver.fct_videos as DBT_INTERNAL_DEST
+      using fct_videos__dbt_tmp as DBT_INTERNAL_SOURCE
+      on 
+                  DBT_INTERNAL_SOURCE.video_id = DBT_INTERNAL_DEST.video_id
+               and 
+                  DBT_INTERNAL_SOURCE.region_id = DBT_INTERNAL_DEST.region_id
+               and 
+                  DBT_INTERNAL_SOURCE.snapshot_at = DBT_INTERNAL_DEST.snapshot_at
+              
+
+      when matched then update set
+         * 
+
+      when not matched then insert *

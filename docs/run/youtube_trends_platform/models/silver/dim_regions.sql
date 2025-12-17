@@ -1,28 +1,23 @@
 
+    -- back compat for old kwarg name
   
-    
-        create or replace table silver.dim_regions
-      
-      
-    using iceberg
-      
-      
-      
-      
-      
-      
-
-      as
-      
-
-WITH src AS (
-    SELECT
-        id          AS region_id,
-        name        AS region_name,
-        created_at
-    FROM bronze.regions
-)
-
-SELECT *
-FROM src
   
+  
+      
+          
+          
+      
+  
+
+  
+
+  merge into silver.dim_regions as DBT_INTERNAL_DEST
+      using dim_regions__dbt_tmp as DBT_INTERNAL_SOURCE
+      on 
+              DBT_INTERNAL_SOURCE.region_id = DBT_INTERNAL_DEST.region_id
+          
+
+      when matched then update set
+         * 
+
+      when not matched then insert *
