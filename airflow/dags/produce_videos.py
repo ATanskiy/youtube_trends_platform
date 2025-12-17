@@ -5,12 +5,12 @@ from airflow.operators.bash import BashOperator
 CONTAINER_NAME = "python_youtube_trends"
 
 with DAG(
-    dag_id="consume_videos",
+    dag_id="produce_videos",
     description="Conduct an API call to get YouTube video regions",
     start_date=datetime(2025, 1, 1),
-    schedule=None,
+    schedule="@hourly",
     catchup=False,
-    tags=["youtube_trends", "get_languages"],
+    tags=["youtube_trends", "produce_videos"],
 ):
 
     run_generator = BashOperator(
