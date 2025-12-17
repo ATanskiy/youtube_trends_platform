@@ -38,8 +38,8 @@ with DAG(
         """
     )
 
-    dbt_run = BashOperator(
-        task_id="dbt_run",
+    dbt_full_refresh = BashOperator(
+        task_id="dbt_full_refresh",
         bash_command=f"""
             docker exec {DBT_CONTAINER} \
               dbt run --project-dir {PROJECT_DIR} --full-refresh
@@ -61,4 +61,4 @@ with DAG(
         """,
     )
 
-    drop_seeds >> dbt_seed >> dbt_run >> generate_docs >> fix_docs
+    drop_seeds >> dbt_seed >> dbt_full_refresh >> generate_docs >> fix_docs

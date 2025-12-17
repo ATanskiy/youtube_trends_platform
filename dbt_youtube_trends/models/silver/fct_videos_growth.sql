@@ -7,7 +7,6 @@
 ) }}
 
 WITH base AS (
-
     SELECT
         video_id,
         region_id,
@@ -23,20 +22,10 @@ WITH base AS (
         comment_count
     FROM {{ ref('fct_videos') }}
 
-    {% if is_incremental() %}
-      WHERE snapshot_at > (
-          SELECT COALESCE(MAX(snapshot_at), TIMESTAMP '1970-01-01')
-          FROM {{ this }}
-      )
-    {% endif %}
 ),
 
-with_history AS (
-
-    SELECT * FROM base
-
-    {% if is_incremental() %}
-    UNION ALL
+{% if is_incremental() %}
+    history AS (
     SELECT
         video_id,
         region_id,
@@ -51,11 +40,7 @@ with_history AS (
         favorite_count,
         comment_count
     FROM {{ this }}
-    {% endif %}
-),
-
-growth AS (
-
+    UNION ALL
     SELECT
         video_id,
         region_id,
@@ -68,37 +53,42 @@ growth AS (
         view_count,
         like_count,
         favorite_count,
-        comment_count,
+        comment_count
+    FROM base
+    WHERE snapshot_at > (SELECT MAX(snapshot_at) FROM {{ this }})
 
-        -- view growth
-        CASE
-            WHEN LAG(view_count) OVER (PARTITION BY video_id, region_id ORDER BY snapshot_at) IS NULL
-            THEN 0
-            ELSE view_count - LAG(view_count) OVER (PARTITION BY video_id, region_id ORDER BY snapshot_at)
-        END AS view_growth,
+),
+{% else %}
+    history AS (
+        SELECT * FROM base
+),
+{% endif %}
 
-        -- like growth
-        CASE
-            WHEN LAG(like_count) OVER (PARTITION BY video_id, region_id ORDER BY snapshot_at) IS NULL
-            THEN 0
-            ELSE like_count - LAG(like_count) OVER (PARTITION BY video_id, region_id ORDER BY snapshot_at)
-        END AS like_growth,
+growth AS (
+    SELECT
+        *,
+        CAST(view_count - LAG(view_count) 
+            OVER (PARTITION BY video_id, region_id ORDER BY snapshot_at)
+            AS BIGINT
+        ) AS view_growth,
 
-        -- favorite growth
-        CASE
-            WHEN LAG(favorite_count) OVER (PARTITION BY video_id, region_id ORDER BY snapshot_at) IS NULL
-            THEN 0
-            ELSE favorite_count - LAG(favorite_count) OVER (PARTITION BY video_id, region_id ORDER BY snapshot_at)
-        END AS favorite_growth,
+        CAST(like_count - LAG(like_count) 
+            OVER ( PARTITION BY video_id, region_id ORDER BY snapshot_at) AS BIGINT) 
+            AS like_growth,
 
-        -- comment growth
-        CASE
-            WHEN LAG(comment_count) OVER (PARTITION BY video_id, region_id ORDER BY snapshot_at) IS NULL
-            THEN 0
-            ELSE comment_count - LAG(comment_count) OVER (PARTITION BY video_id, region_id ORDER BY snapshot_at)
-        END AS comment_growth
-    FROM with_history
+        CAST(favorite_count - LAG(favorite_count) 
+            OVER (PARTITION BY video_id, region_id ORDER BY snapshot_at)AS BIGINT) 
+            AS favorite_growth,
+
+        CAST(comment_count - LAG(comment_count) 
+            OVER (PARTITION BY video_id, region_id ORDER BY snapshot_at)AS BIGINT) 
+            AS comment_growth
+    FROM history
 )
 
 SELECT *
 FROM growth
+
+{% if is_incremental() %}
+    WHERE snapshot_at > (SELECT MAX(snapshot_at) FROM {{ this }})
+{% endif %}
