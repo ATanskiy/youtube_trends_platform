@@ -15,7 +15,7 @@ with DAG(
     dag_id="dbt_run",
     description="Run dbt models on Spark",
     start_date=datetime(2025, 1, 1),
-    schedule="*/30 * * * *",
+    schedule="*/15 * * * *",
     catchup=False,
     default_args=default_args,
     tags=["dbt", "spark", "youtube_trends"],
