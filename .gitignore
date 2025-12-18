@@ -13,3 +13,5 @@ __pycache__/
 *.pyc
 *.log
 *.db
+
+jobs/*.csv
