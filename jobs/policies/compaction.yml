@@ -1,0 +1,27 @@
+catalog: youtube_trends
+
+defaults:
+  rewrite_data_files: true
+  target_file_size_bytes: 134217728        # 128 MB
+  rewrite_manifests: true
+  expire_snapshots_days: 2                 # ⬅ keep last 2 days only
+  remove_orphans: true                    # ⬅ leave false for now
+  remove_orphans_older_than_hours: 72
+
+namespaces:
+  bronze:
+    target_file_size_bytes: 134217728
+    expire_snapshots_days: 2               # ⬅ explicit, same as defaults
+
+  silver:
+    target_file_size_bytes: 134217728
+    expire_snapshots_days: 2
+
+  gold:
+    target_file_size_bytes: 134217728
+    expire_snapshots_days: 2
+
+tables:
+  bronze.videos:
+    target_file_size_bytes: 134217728
+    expire_snapshots_days: 2

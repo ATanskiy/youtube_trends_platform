@@ -18,7 +18,7 @@ with DAG(
     dag_id="produce_regions_categories_languages",
     description="Fetch YouTube reference data via API",
     start_date=datetime(2025, 1, 1),
-    schedule=None,
+    schedule="0 0,12 * * *",
     catchup=False,
     tags=["youtube_trends", "produce_regions", "produce_categories", "produce_languages"],
 ):

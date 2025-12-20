@@ -10,7 +10,7 @@ with DAG(
     dag_id="spark_upsert_regions_categories_languages",
     description="Run Spark batch jobs for YouTube reference tables",
     start_date=datetime(2025, 1, 1),
-    schedule=None,
+    schedule="0 1,13 * * *",
     catchup=False,
     tags=["spark", "batch", "youtube_trends", "reference_data"],
 ):

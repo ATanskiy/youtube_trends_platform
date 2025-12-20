@@ -1,0 +1,11 @@
+catalog: youtube_trends
+
+namespaces:
+  bronze:
+    location: s3a://youtube-trends/bronze
+
+  silver:
+    location: s3a://youtube-trends/silver
+
+  gold:
+    location: s3a://youtube-trends/gold

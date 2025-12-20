@@ -2,8 +2,8 @@
   "metadata": {
     "dbt_schema_version": "https://schemas.getdbt.com/dbt/manifest/v12.json",
     "dbt_version": "1.9.3",
-    "generated_at": "2025-12-18T16:44:08.858474Z",
-    "invocation_id": "79a5e6bd-3a2c-41ba-b0c4-e9c902ff5e22",
+    "generated_at": "2025-12-20T14:30:30.581645Z",
+    "invocation_id": "78adca99-b2a9-4e0a-8497-3ab1e3fdff99",
     "env": {},
     "project_name": "youtube_trends_platform",
     "project_id": "c3555091a13ce013607d85f42fd22b40",
@@ -155,248 +155,6 @@
       "primary_key": [
         "channel_id"
       ],
-      "time_spine": null
-    },
-    "model.youtube_trends_platform.fct_videos": {
-      "database": "youtube_trends",
-      "schema": "silver",
-      "name": "silver.fct_videos",
-      "resource_type": "model",
-      "package_name": "youtube_trends_platform",
-      "path": "silver/fct_videos.sql",
-      "original_file_path": "models/silver/fct_videos.sql",
-      "unique_id": "model.youtube_trends_platform.fct_videos",
-      "fqn": [
-        "youtube_trends_platform",
-        "silver",
-        "fct_videos"
-      ],
-      "alias": "fct_videos",
-      "checksum": {
-        "name": "sha256",
-        "checksum": "304800194445e56c39d59f24219ce867f79daeb690676d7c1be0ff1464aeff80"
-      },
-      "config": {
-        "enabled": true,
-        "alias": null,
-        "schema": "silver",
-        "database": null,
-        "tags": [],
-        "meta": {},
-        "group": null,
-        "materialized": "incremental",
-        "incremental_strategy": "merge",
-        "batch_size": null,
-        "lookback": 1,
-        "begin": null,
-        "persist_docs": {},
-        "post-hook": [],
-        "pre-hook": [],
-        "quoting": {},
-        "column_types": {},
-        "full_refresh": null,
-        "unique_key": [
-          "video_id",
-          "region_id",
-          "snapshot_at"
-        ],
-        "on_schema_change": "append_new_columns",
-        "on_configuration_change": "apply",
-        "grants": {},
-        "packages": [],
-        "docs": {
-          "show": true,
-          "node_color": null
-        },
-        "contract": {
-          "enforced": false,
-          "alias_types": true
-        },
-        "event_time": null,
-        "concurrent_batches": null,
-        "access": "protected",
-        "file_format": "iceberg",
-        "table_type": "iceberg"
-      },
-      "tags": [],
-      "description": "Snapshot fact table containing absolute engagement metrics per video and region.",
-      "columns": {
-        "video_id": {
-          "name": "video_id",
-          "description": "Unique YouTube video identifier.",
-          "meta": {},
-          "data_type": null,
-          "constraints": [],
-          "quote": null,
-          "tags": [],
-          "granularity": null
-        },
-        "region_id": {
-          "name": "region_id",
-          "description": "Region where the metrics were collected.",
-          "meta": {},
-          "data_type": null,
-          "constraints": [],
-          "quote": null,
-          "tags": [],
-          "granularity": null
-        },
-        "language_id": {
-          "name": "language_id",
-          "description": "Normalized language identifier.",
-          "meta": {},
-          "data_type": null,
-          "constraints": [],
-          "quote": null,
-          "tags": [],
-          "granularity": null
-        },
-        "language_id_src": {
-          "name": "language_id_src",
-          "description": "Raw language identifier from the API.",
-          "meta": {},
-          "data_type": null,
-          "constraints": [],
-          "quote": null,
-          "tags": [],
-          "granularity": null
-        },
-        "channel_id": {
-          "name": "channel_id",
-          "description": "Channel ID that published the video.",
-          "meta": {},
-          "data_type": null,
-          "constraints": [],
-          "quote": null,
-          "tags": [],
-          "granularity": null
-        },
-        "category_id": {
-          "name": "category_id",
-          "description": "Category ID associated with the video.",
-          "meta": {},
-          "data_type": null,
-          "constraints": [],
-          "quote": null,
-          "tags": [],
-          "granularity": null
-        },
-        "published_at": {
-          "name": "published_at",
-          "description": "Timestamp when the video was published.",
-          "meta": {},
-          "data_type": null,
-          "constraints": [],
-          "quote": null,
-          "tags": [],
-          "granularity": null
-        },
-        "snapshot_at": {
-          "name": "snapshot_at",
-          "description": "Timestamp when the metrics snapshot was taken.",
-          "meta": {},
-          "data_type": null,
-          "constraints": [],
-          "quote": null,
-          "tags": [],
-          "granularity": null
-        },
-        "view_count": {
-          "name": "view_count",
-          "description": "Total number of views at snapshot time.",
-          "meta": {},
-          "data_type": null,
-          "constraints": [],
-          "quote": null,
-          "tags": [],
-          "granularity": null
-        },
-        "like_count": {
-          "name": "like_count",
-          "description": "Total number of likes at snapshot time.",
-          "meta": {},
-          "data_type": null,
-          "constraints": [],
-          "quote": null,
-          "tags": [],
-          "granularity": null
-        },
-        "favorite_count": {
-          "name": "favorite_count",
-          "description": "Total number of favorites at snapshot time.",
-          "meta": {},
-          "data_type": null,
-          "constraints": [],
-          "quote": null,
-          "tags": [],
-          "granularity": null
-        },
-        "comment_count": {
-          "name": "comment_count",
-          "description": "Total number of comments at snapshot time.",
-          "meta": {},
-          "data_type": null,
-          "constraints": [],
-          "quote": null,
-          "tags": [],
-          "granularity": null
-        }
-      },
-      "meta": {},
-      "group": null,
-      "docs": {
-        "show": true,
-        "node_color": null
-      },
-      "patch_path": "youtube_trends_platform://models/silver/schema.yml",
-      "build_path": null,
-      "unrendered_config": {
-        "schema": "silver",
-        "materialized": "incremental",
-        "file_format": "iceberg",
-        "table_type": "iceberg",
-        "incremental_strategy": "merge",
-        "unique_key": [
-          "video_id",
-          "region_id",
-          "snapshot_at"
-        ],
-        "on_schema_change": "append_new_columns"
-      },
-      "created_at": 1765980375.261773,
-      "relation_name": "youtube_trends.silver.fct_videos",
-      "raw_code": "{{ config(\r\n    materialized='incremental',\r\n    incremental_strategy='merge',\r\n    unique_key=['video_id', 'region_id', 'snapshot_at'],\r\n    table_type='iceberg',\r\n    on_schema_change='append_new_columns'\r\n) }}\r\n\r\nWITH src AS (\r\n    SELECT\r\n        id AS video_id,\r\n        region_id,\r\n        language_id,\r\n        language_id_src,\r\n        channel_id,\r\n        category_id,\r\n        CAST(view_count AS BIGINT)      AS view_count,\r\n        CAST(like_count AS BIGINT)      AS like_count,\r\n        CAST(favorite_count AS BIGINT)  AS favorite_count,\r\n        CAST(comment_count AS BIGINT)   AS comment_count,\r\n        CAST(published_at AS TIMESTAMP) AS published_at,\r\n        CAST(created_at AS TIMESTAMP)   AS snapshot_at\r\n    FROM {{ source('bronze', 'videos') }}\r\n),\r\n\r\ndeduped AS (\r\n    SELECT *\r\n    FROM (\r\n        SELECT\r\n            *,\r\n            ROW_NUMBER() OVER (\r\n                PARTITION BY video_id, region_id, snapshot_at\r\n                ORDER BY snapshot_at DESC\r\n            ) AS rn\r\n        FROM src\r\n    )\r\n    WHERE rn = 1\r\n)\r\n\r\nSELECT\r\n    video_id,\r\n    region_id,\r\n    language_id,\r\n    language_id_src,\r\n    channel_id,\r\n    category_id,\r\n    view_count,\r\n    like_count,\r\n    favorite_count,\r\n    comment_count,\r\n    published_at,\r\n    snapshot_at\r\nFROM deduped",
-      "language": "sql",
-      "refs": [],
-      "sources": [
-        [
-          "bronze",
-          "videos"
-        ]
-      ],
-      "metrics": [],
-      "depends_on": {
-        "macros": [],
-        "nodes": [
-          "source.youtube_trends_platform.bronze.videos"
-        ]
-      },
-      "compiled_path": "target/compiled/youtube_trends_platform/models/silver/fct_videos.sql",
-      "compiled": true,
-      "compiled_code": "\n\nWITH src AS (\n    SELECT\n        id AS video_id,\n        region_id,\n        language_id,\n        language_id_src,\n        channel_id,\n        category_id,\n        CAST(view_count AS BIGINT)      AS view_count,\n        CAST(like_count AS BIGINT)      AS like_count,\n        CAST(favorite_count AS BIGINT)  AS favorite_count,\n        CAST(comment_count AS BIGINT)   AS comment_count,\n        CAST(published_at AS TIMESTAMP) AS published_at,\n        CAST(created_at AS TIMESTAMP)   AS snapshot_at\n    FROM bronze.videos\n),\n\ndeduped AS (\n    SELECT *\n    FROM (\n        SELECT\n            *,\n            ROW_NUMBER() OVER (\n                PARTITION BY video_id, region_id, snapshot_at\n                ORDER BY snapshot_at DESC\n            ) AS rn\n        FROM src\n    )\n    WHERE rn = 1\n)\n\nSELECT\n    video_id,\n    region_id,\n    language_id,\n    language_id_src,\n    channel_id,\n    category_id,\n    view_count,\n    like_count,\n    favorite_count,\n    comment_count,\n    published_at,\n    snapshot_at\nFROM deduped",
-      "extra_ctes_injected": true,
-      "extra_ctes": [],
-      "contract": {
-        "enforced": false,
-        "alias_types": true,
-        "checksum": null
-      },
-      "access": "protected",
-      "constraints": [],
-      "version": null,
-      "latest_version": null,
-      "deprecation_date": null,
-      "primary_key": [],
       "time_spine": null
     },
     "seed.youtube_trends_platform.dim_regions_geo": {
@@ -709,285 +467,6 @@
         "kwargs": {
           "column_name": "channel_id",
           "model": "{{ get_where_subquery(ref('dim_channels')) }}"
-        },
-        "namespace": null
-      }
-    },
-    "test.youtube_trends_platform.not_null_fct_videos_video_id.9ee09cfe60": {
-      "database": null,
-      "schema": "dbt_test__audit",
-      "name": "not_null_fct_videos_video_id",
-      "resource_type": "test",
-      "package_name": "youtube_trends_platform",
-      "path": "not_null_fct_videos_video_id.sql",
-      "original_file_path": "models/silver/schema.yml",
-      "unique_id": "test.youtube_trends_platform.not_null_fct_videos_video_id.9ee09cfe60",
-      "fqn": [
-        "youtube_trends_platform",
-        "silver",
-        "not_null_fct_videos_video_id"
-      ],
-      "alias": "not_null_fct_videos_video_id",
-      "checksum": {
-        "name": "none",
-        "checksum": ""
-      },
-      "config": {
-        "enabled": true,
-        "alias": null,
-        "schema": "dbt_test__audit",
-        "database": null,
-        "tags": [],
-        "meta": {},
-        "group": null,
-        "materialized": "test",
-        "severity": "ERROR",
-        "store_failures": null,
-        "store_failures_as": null,
-        "where": null,
-        "limit": null,
-        "fail_calc": "count(*)",
-        "warn_if": "!= 0",
-        "error_if": "!= 0"
-      },
-      "tags": [],
-      "description": "",
-      "columns": {},
-      "meta": {},
-      "group": null,
-      "docs": {
-        "show": true,
-        "node_color": null
-      },
-      "patch_path": null,
-      "build_path": null,
-      "unrendered_config": {},
-      "created_at": 1765980375.3373823,
-      "relation_name": null,
-      "raw_code": "{{ test_not_null(**_dbt_generic_test_kwargs) }}",
-      "language": "sql",
-      "refs": [
-        {
-          "name": "fct_videos",
-          "package": null,
-          "version": null
-        }
-      ],
-      "sources": [],
-      "metrics": [],
-      "depends_on": {
-        "macros": [
-          "macro.dbt.test_not_null",
-          "macro.dbt.get_where_subquery"
-        ],
-        "nodes": [
-          "model.youtube_trends_platform.fct_videos"
-        ]
-      },
-      "compiled_path": "target/compiled/youtube_trends_platform/models/silver/schema.yml/not_null_fct_videos_video_id.sql",
-      "compiled": true,
-      "compiled_code": "\n    \n    \n\n\n\nselect video_id\nfrom silver.fct_videos\nwhere video_id is null\n\n\n",
-      "extra_ctes_injected": true,
-      "extra_ctes": [],
-      "contract": {
-        "enforced": false,
-        "alias_types": true,
-        "checksum": null
-      },
-      "column_name": "video_id",
-      "file_key_name": "models.fct_videos",
-      "attached_node": "model.youtube_trends_platform.fct_videos",
-      "test_metadata": {
-        "name": "not_null",
-        "kwargs": {
-          "column_name": "video_id",
-          "model": "{{ get_where_subquery(ref('fct_videos')) }}"
-        },
-        "namespace": null
-      }
-    },
-    "test.youtube_trends_platform.not_null_fct_videos_region_id.6cbc3c9d50": {
-      "database": null,
-      "schema": "dbt_test__audit",
-      "name": "not_null_fct_videos_region_id",
-      "resource_type": "test",
-      "package_name": "youtube_trends_platform",
-      "path": "not_null_fct_videos_region_id.sql",
-      "original_file_path": "models/silver/schema.yml",
-      "unique_id": "test.youtube_trends_platform.not_null_fct_videos_region_id.6cbc3c9d50",
-      "fqn": [
-        "youtube_trends_platform",
-        "silver",
-        "not_null_fct_videos_region_id"
-      ],
-      "alias": "not_null_fct_videos_region_id",
-      "checksum": {
-        "name": "none",
-        "checksum": ""
-      },
-      "config": {
-        "enabled": true,
-        "alias": null,
-        "schema": "dbt_test__audit",
-        "database": null,
-        "tags": [],
-        "meta": {},
-        "group": null,
-        "materialized": "test",
-        "severity": "ERROR",
-        "store_failures": null,
-        "store_failures_as": null,
-        "where": null,
-        "limit": null,
-        "fail_calc": "count(*)",
-        "warn_if": "!= 0",
-        "error_if": "!= 0"
-      },
-      "tags": [],
-      "description": "",
-      "columns": {},
-      "meta": {},
-      "group": null,
-      "docs": {
-        "show": true,
-        "node_color": null
-      },
-      "patch_path": null,
-      "build_path": null,
-      "unrendered_config": {},
-      "created_at": 1765980375.3382735,
-      "relation_name": null,
-      "raw_code": "{{ test_not_null(**_dbt_generic_test_kwargs) }}",
-      "language": "sql",
-      "refs": [
-        {
-          "name": "fct_videos",
-          "package": null,
-          "version": null
-        }
-      ],
-      "sources": [],
-      "metrics": [],
-      "depends_on": {
-        "macros": [
-          "macro.dbt.test_not_null",
-          "macro.dbt.get_where_subquery"
-        ],
-        "nodes": [
-          "model.youtube_trends_platform.fct_videos"
-        ]
-      },
-      "compiled_path": "target/compiled/youtube_trends_platform/models/silver/schema.yml/not_null_fct_videos_region_id.sql",
-      "compiled": true,
-      "compiled_code": "\n    \n    \n\n\n\nselect region_id\nfrom silver.fct_videos\nwhere region_id is null\n\n\n",
-      "extra_ctes_injected": true,
-      "extra_ctes": [],
-      "contract": {
-        "enforced": false,
-        "alias_types": true,
-        "checksum": null
-      },
-      "column_name": "region_id",
-      "file_key_name": "models.fct_videos",
-      "attached_node": "model.youtube_trends_platform.fct_videos",
-      "test_metadata": {
-        "name": "not_null",
-        "kwargs": {
-          "column_name": "region_id",
-          "model": "{{ get_where_subquery(ref('fct_videos')) }}"
-        },
-        "namespace": null
-      }
-    },
-    "test.youtube_trends_platform.not_null_fct_videos_snapshot_at.333e5181cf": {
-      "database": null,
-      "schema": "dbt_test__audit",
-      "name": "not_null_fct_videos_snapshot_at",
-      "resource_type": "test",
-      "package_name": "youtube_trends_platform",
-      "path": "not_null_fct_videos_snapshot_at.sql",
-      "original_file_path": "models/silver/schema.yml",
-      "unique_id": "test.youtube_trends_platform.not_null_fct_videos_snapshot_at.333e5181cf",
-      "fqn": [
-        "youtube_trends_platform",
-        "silver",
-        "not_null_fct_videos_snapshot_at"
-      ],
-      "alias": "not_null_fct_videos_snapshot_at",
-      "checksum": {
-        "name": "none",
-        "checksum": ""
-      },
-      "config": {
-        "enabled": true,
-        "alias": null,
-        "schema": "dbt_test__audit",
-        "database": null,
-        "tags": [],
-        "meta": {},
-        "group": null,
-        "materialized": "test",
-        "severity": "ERROR",
-        "store_failures": null,
-        "store_failures_as": null,
-        "where": null,
-        "limit": null,
-        "fail_calc": "count(*)",
-        "warn_if": "!= 0",
-        "error_if": "!= 0"
-      },
-      "tags": [],
-      "description": "",
-      "columns": {},
-      "meta": {},
-      "group": null,
-      "docs": {
-        "show": true,
-        "node_color": null
-      },
-      "patch_path": null,
-      "build_path": null,
-      "unrendered_config": {},
-      "created_at": 1765980375.339222,
-      "relation_name": null,
-      "raw_code": "{{ test_not_null(**_dbt_generic_test_kwargs) }}",
-      "language": "sql",
-      "refs": [
-        {
-          "name": "fct_videos",
-          "package": null,
-          "version": null
-        }
-      ],
-      "sources": [],
-      "metrics": [],
-      "depends_on": {
-        "macros": [
-          "macro.dbt.test_not_null",
-          "macro.dbt.get_where_subquery"
-        ],
-        "nodes": [
-          "model.youtube_trends_platform.fct_videos"
-        ]
-      },
-      "compiled_path": "target/compiled/youtube_trends_platform/models/silver/schema.yml/not_null_fct_videos_snapshot_at.sql",
-      "compiled": true,
-      "compiled_code": "\n    \n    \n\n\n\nselect snapshot_at\nfrom silver.fct_videos\nwhere snapshot_at is null\n\n\n",
-      "extra_ctes_injected": true,
-      "extra_ctes": [],
-      "contract": {
-        "enforced": false,
-        "alias_types": true,
-        "checksum": null
-      },
-      "column_name": "snapshot_at",
-      "file_key_name": "models.fct_videos",
-      "attached_node": "model.youtube_trends_platform.fct_videos",
-      "test_metadata": {
-        "name": "not_null",
-        "kwargs": {
-          "column_name": "snapshot_at",
-          "model": "{{ get_where_subquery(ref('fct_videos')) }}"
         },
         "namespace": null
       }
@@ -3589,6 +3068,529 @@
         "kwargs": {
           "column_name": "snapshot_at",
           "model": "{{ get_where_subquery(ref('fct_videos_growth')) }}"
+        },
+        "namespace": null
+      }
+    },
+    "model.youtube_trends_platform.fct_videos": {
+      "database": "youtube_trends",
+      "schema": "silver",
+      "name": "silver.fct_videos",
+      "resource_type": "model",
+      "package_name": "youtube_trends_platform",
+      "path": "silver/fct_videos.sql",
+      "original_file_path": "models/silver/fct_videos.sql",
+      "unique_id": "model.youtube_trends_platform.fct_videos",
+      "fqn": [
+        "youtube_trends_platform",
+        "silver",
+        "fct_videos"
+      ],
+      "alias": "fct_videos",
+      "checksum": {
+        "name": "sha256",
+        "checksum": "088555a42c36b0bcb6e067e8fd1326e98c23aa999f5e99f90f66bc0bfe3db05d"
+      },
+      "config": {
+        "enabled": true,
+        "alias": null,
+        "schema": "silver",
+        "database": null,
+        "tags": [],
+        "meta": {},
+        "group": null,
+        "materialized": "incremental",
+        "incremental_strategy": "merge",
+        "batch_size": null,
+        "lookback": 1,
+        "begin": null,
+        "persist_docs": {},
+        "post-hook": [],
+        "pre-hook": [],
+        "quoting": {},
+        "column_types": {},
+        "full_refresh": null,
+        "unique_key": [
+          "video_id",
+          "region_id",
+          "snapshot_at"
+        ],
+        "on_schema_change": "append_new_columns",
+        "on_configuration_change": "apply",
+        "grants": {},
+        "packages": [],
+        "docs": {
+          "show": true,
+          "node_color": null
+        },
+        "contract": {
+          "enforced": false,
+          "alias_types": true
+        },
+        "event_time": null,
+        "concurrent_batches": null,
+        "access": "protected",
+        "file_format": "iceberg",
+        "table_type": "iceberg"
+      },
+      "tags": [],
+      "description": "Snapshot fact table containing absolute engagement metrics per video and region.",
+      "columns": {
+        "video_id": {
+          "name": "video_id",
+          "description": "Unique YouTube video identifier.",
+          "meta": {},
+          "data_type": null,
+          "constraints": [],
+          "quote": null,
+          "tags": [],
+          "granularity": null
+        },
+        "region_id": {
+          "name": "region_id",
+          "description": "Region where the metrics were collected.",
+          "meta": {},
+          "data_type": null,
+          "constraints": [],
+          "quote": null,
+          "tags": [],
+          "granularity": null
+        },
+        "language_id": {
+          "name": "language_id",
+          "description": "Normalized language identifier.",
+          "meta": {},
+          "data_type": null,
+          "constraints": [],
+          "quote": null,
+          "tags": [],
+          "granularity": null
+        },
+        "language_id_src": {
+          "name": "language_id_src",
+          "description": "Raw language identifier from the API.",
+          "meta": {},
+          "data_type": null,
+          "constraints": [],
+          "quote": null,
+          "tags": [],
+          "granularity": null
+        },
+        "channel_id": {
+          "name": "channel_id",
+          "description": "Channel ID that published the video.",
+          "meta": {},
+          "data_type": null,
+          "constraints": [],
+          "quote": null,
+          "tags": [],
+          "granularity": null
+        },
+        "category_id": {
+          "name": "category_id",
+          "description": "Category ID associated with the video.",
+          "meta": {},
+          "data_type": null,
+          "constraints": [],
+          "quote": null,
+          "tags": [],
+          "granularity": null
+        },
+        "published_at": {
+          "name": "published_at",
+          "description": "Timestamp when the video was published.",
+          "meta": {},
+          "data_type": null,
+          "constraints": [],
+          "quote": null,
+          "tags": [],
+          "granularity": null
+        },
+        "snapshot_at": {
+          "name": "snapshot_at",
+          "description": "Timestamp when the metrics snapshot was taken.",
+          "meta": {},
+          "data_type": null,
+          "constraints": [],
+          "quote": null,
+          "tags": [],
+          "granularity": null
+        },
+        "view_count": {
+          "name": "view_count",
+          "description": "Total number of views at snapshot time.",
+          "meta": {},
+          "data_type": null,
+          "constraints": [],
+          "quote": null,
+          "tags": [],
+          "granularity": null
+        },
+        "like_count": {
+          "name": "like_count",
+          "description": "Total number of likes at snapshot time.",
+          "meta": {},
+          "data_type": null,
+          "constraints": [],
+          "quote": null,
+          "tags": [],
+          "granularity": null
+        },
+        "favorite_count": {
+          "name": "favorite_count",
+          "description": "Total number of favorites at snapshot time.",
+          "meta": {},
+          "data_type": null,
+          "constraints": [],
+          "quote": null,
+          "tags": [],
+          "granularity": null
+        },
+        "comment_count": {
+          "name": "comment_count",
+          "description": "Total number of comments at snapshot time.",
+          "meta": {},
+          "data_type": null,
+          "constraints": [],
+          "quote": null,
+          "tags": [],
+          "granularity": null
+        }
+      },
+      "meta": {},
+      "group": null,
+      "docs": {
+        "show": true,
+        "node_color": null
+      },
+      "patch_path": "youtube_trends_platform://models/silver/schema.yml",
+      "build_path": null,
+      "unrendered_config": {
+        "schema": "silver",
+        "materialized": "incremental",
+        "file_format": "iceberg",
+        "table_type": "iceberg",
+        "incremental_strategy": "merge",
+        "unique_key": [
+          "video_id",
+          "region_id",
+          "snapshot_at"
+        ],
+        "on_schema_change": "append_new_columns"
+      },
+      "created_at": 1766236400.1174378,
+      "relation_name": "youtube_trends.silver.fct_videos",
+      "raw_code": "{{ config(\r\n    materialized='incremental',\r\n    incremental_strategy='merge',\r\n    unique_key=['video_id', 'region_id', 'snapshot_at'],\r\n    table_type='iceberg',\r\n    on_schema_change='append_new_columns'\r\n) }}\r\n\r\nWITH src AS (\r\n    SELECT\r\n        id AS video_id,\r\n        region_id,\r\n        language_id,\r\n        language_id_src,\r\n        channel_id,\r\n        category_id,\r\n        CAST(view_count AS BIGINT)      AS view_count,\r\n        CAST(like_count AS BIGINT)      AS like_count,\r\n        CAST(favorite_count AS BIGINT)  AS favorite_count,\r\n        CAST(comment_count AS BIGINT)   AS comment_count,\r\n        CAST(published_at AS TIMESTAMP) AS published_at,\r\n        CAST(created_at AS TIMESTAMP)   AS snapshot_at\r\n    FROM {{ source('bronze', 'videos') }}\r\n\r\n    {% if is_incremental() %}\r\n      WHERE created_at > (\r\n          SELECT COALESCE(MAX(snapshot_at), TIMESTAMP '1970-01-01')\r\n          FROM {{ this }}\r\n      )\r\n    {% endif %}\r\n),\r\n\r\ndeduped AS (\r\n    SELECT *\r\n    FROM (\r\n        SELECT\r\n            *,\r\n            ROW_NUMBER() OVER (\r\n                PARTITION BY video_id, region_id, snapshot_at\r\n                ORDER BY snapshot_at DESC\r\n            ) AS rn\r\n        FROM src\r\n    )\r\n    WHERE rn = 1\r\n)\r\n\r\nSELECT\r\n    video_id,\r\n    region_id,\r\n    language_id,\r\n    language_id_src,\r\n    channel_id,\r\n    category_id,\r\n    view_count,\r\n    like_count,\r\n    favorite_count,\r\n    comment_count,\r\n    published_at,\r\n    snapshot_at\r\nFROM deduped",
+      "language": "sql",
+      "refs": [],
+      "sources": [
+        [
+          "bronze",
+          "videos"
+        ]
+      ],
+      "metrics": [],
+      "depends_on": {
+        "macros": [
+          "macro.dbt.is_incremental"
+        ],
+        "nodes": [
+          "source.youtube_trends_platform.bronze.videos"
+        ]
+      },
+      "compiled_path": "target/compiled/youtube_trends_platform/models/silver/fct_videos.sql",
+      "compiled": true,
+      "compiled_code": "\n\nWITH src AS (\n    SELECT\n        id AS video_id,\n        region_id,\n        language_id,\n        language_id_src,\n        channel_id,\n        category_id,\n        CAST(view_count AS BIGINT)      AS view_count,\n        CAST(like_count AS BIGINT)      AS like_count,\n        CAST(favorite_count AS BIGINT)  AS favorite_count,\n        CAST(comment_count AS BIGINT)   AS comment_count,\n        CAST(published_at AS TIMESTAMP) AS published_at,\n        CAST(created_at AS TIMESTAMP)   AS snapshot_at\n    FROM bronze.videos\n\n    \n      WHERE created_at > (\n          SELECT COALESCE(MAX(snapshot_at), TIMESTAMP '1970-01-01')\n          FROM silver.fct_videos\n      )\n    \n),\n\ndeduped AS (\n    SELECT *\n    FROM (\n        SELECT\n            *,\n            ROW_NUMBER() OVER (\n                PARTITION BY video_id, region_id, snapshot_at\n                ORDER BY snapshot_at DESC\n            ) AS rn\n        FROM src\n    )\n    WHERE rn = 1\n)\n\nSELECT\n    video_id,\n    region_id,\n    language_id,\n    language_id_src,\n    channel_id,\n    category_id,\n    view_count,\n    like_count,\n    favorite_count,\n    comment_count,\n    published_at,\n    snapshot_at\nFROM deduped",
+      "extra_ctes_injected": true,
+      "extra_ctes": [],
+      "contract": {
+        "enforced": false,
+        "alias_types": true,
+        "checksum": null
+      },
+      "access": "protected",
+      "constraints": [],
+      "version": null,
+      "latest_version": null,
+      "deprecation_date": null,
+      "primary_key": [],
+      "time_spine": null
+    },
+    "test.youtube_trends_platform.not_null_fct_videos_video_id.9ee09cfe60": {
+      "database": null,
+      "schema": "dbt_test__audit",
+      "name": "not_null_fct_videos_video_id",
+      "resource_type": "test",
+      "package_name": "youtube_trends_platform",
+      "path": "not_null_fct_videos_video_id.sql",
+      "original_file_path": "models/silver/schema.yml",
+      "unique_id": "test.youtube_trends_platform.not_null_fct_videos_video_id.9ee09cfe60",
+      "fqn": [
+        "youtube_trends_platform",
+        "silver",
+        "not_null_fct_videos_video_id"
+      ],
+      "alias": "not_null_fct_videos_video_id",
+      "checksum": {
+        "name": "none",
+        "checksum": ""
+      },
+      "config": {
+        "enabled": true,
+        "alias": null,
+        "schema": "dbt_test__audit",
+        "database": null,
+        "tags": [],
+        "meta": {},
+        "group": null,
+        "materialized": "test",
+        "severity": "ERROR",
+        "store_failures": null,
+        "store_failures_as": null,
+        "where": null,
+        "limit": null,
+        "fail_calc": "count(*)",
+        "warn_if": "!= 0",
+        "error_if": "!= 0"
+      },
+      "tags": [],
+      "description": "",
+      "columns": {},
+      "meta": {},
+      "group": null,
+      "docs": {
+        "show": true,
+        "node_color": null
+      },
+      "patch_path": null,
+      "build_path": null,
+      "unrendered_config": {},
+      "created_at": 1766236400.184481,
+      "relation_name": null,
+      "raw_code": "{{ test_not_null(**_dbt_generic_test_kwargs) }}",
+      "language": "sql",
+      "refs": [
+        {
+          "name": "fct_videos",
+          "package": null,
+          "version": null
+        }
+      ],
+      "sources": [],
+      "metrics": [],
+      "depends_on": {
+        "macros": [
+          "macro.dbt.test_not_null",
+          "macro.dbt.get_where_subquery"
+        ],
+        "nodes": [
+          "model.youtube_trends_platform.fct_videos"
+        ]
+      },
+      "compiled_path": "target/compiled/youtube_trends_platform/models/silver/schema.yml/not_null_fct_videos_video_id.sql",
+      "compiled": true,
+      "compiled_code": "\n    \n    \n\n\n\nselect video_id\nfrom silver.fct_videos\nwhere video_id is null\n\n\n",
+      "extra_ctes_injected": true,
+      "extra_ctes": [],
+      "contract": {
+        "enforced": false,
+        "alias_types": true,
+        "checksum": null
+      },
+      "column_name": "video_id",
+      "file_key_name": "models.fct_videos",
+      "attached_node": "model.youtube_trends_platform.fct_videos",
+      "test_metadata": {
+        "name": "not_null",
+        "kwargs": {
+          "column_name": "video_id",
+          "model": "{{ get_where_subquery(ref('fct_videos')) }}"
+        },
+        "namespace": null
+      }
+    },
+    "test.youtube_trends_platform.not_null_fct_videos_region_id.6cbc3c9d50": {
+      "database": null,
+      "schema": "dbt_test__audit",
+      "name": "not_null_fct_videos_region_id",
+      "resource_type": "test",
+      "package_name": "youtube_trends_platform",
+      "path": "not_null_fct_videos_region_id.sql",
+      "original_file_path": "models/silver/schema.yml",
+      "unique_id": "test.youtube_trends_platform.not_null_fct_videos_region_id.6cbc3c9d50",
+      "fqn": [
+        "youtube_trends_platform",
+        "silver",
+        "not_null_fct_videos_region_id"
+      ],
+      "alias": "not_null_fct_videos_region_id",
+      "checksum": {
+        "name": "none",
+        "checksum": ""
+      },
+      "config": {
+        "enabled": true,
+        "alias": null,
+        "schema": "dbt_test__audit",
+        "database": null,
+        "tags": [],
+        "meta": {},
+        "group": null,
+        "materialized": "test",
+        "severity": "ERROR",
+        "store_failures": null,
+        "store_failures_as": null,
+        "where": null,
+        "limit": null,
+        "fail_calc": "count(*)",
+        "warn_if": "!= 0",
+        "error_if": "!= 0"
+      },
+      "tags": [],
+      "description": "",
+      "columns": {},
+      "meta": {},
+      "group": null,
+      "docs": {
+        "show": true,
+        "node_color": null
+      },
+      "patch_path": null,
+      "build_path": null,
+      "unrendered_config": {},
+      "created_at": 1766236400.1859896,
+      "relation_name": null,
+      "raw_code": "{{ test_not_null(**_dbt_generic_test_kwargs) }}",
+      "language": "sql",
+      "refs": [
+        {
+          "name": "fct_videos",
+          "package": null,
+          "version": null
+        }
+      ],
+      "sources": [],
+      "metrics": [],
+      "depends_on": {
+        "macros": [
+          "macro.dbt.test_not_null",
+          "macro.dbt.get_where_subquery"
+        ],
+        "nodes": [
+          "model.youtube_trends_platform.fct_videos"
+        ]
+      },
+      "compiled_path": "target/compiled/youtube_trends_platform/models/silver/schema.yml/not_null_fct_videos_region_id.sql",
+      "compiled": true,
+      "compiled_code": "\n    \n    \n\n\n\nselect region_id\nfrom silver.fct_videos\nwhere region_id is null\n\n\n",
+      "extra_ctes_injected": true,
+      "extra_ctes": [],
+      "contract": {
+        "enforced": false,
+        "alias_types": true,
+        "checksum": null
+      },
+      "column_name": "region_id",
+      "file_key_name": "models.fct_videos",
+      "attached_node": "model.youtube_trends_platform.fct_videos",
+      "test_metadata": {
+        "name": "not_null",
+        "kwargs": {
+          "column_name": "region_id",
+          "model": "{{ get_where_subquery(ref('fct_videos')) }}"
+        },
+        "namespace": null
+      }
+    },
+    "test.youtube_trends_platform.not_null_fct_videos_snapshot_at.333e5181cf": {
+      "database": null,
+      "schema": "dbt_test__audit",
+      "name": "not_null_fct_videos_snapshot_at",
+      "resource_type": "test",
+      "package_name": "youtube_trends_platform",
+      "path": "not_null_fct_videos_snapshot_at.sql",
+      "original_file_path": "models/silver/schema.yml",
+      "unique_id": "test.youtube_trends_platform.not_null_fct_videos_snapshot_at.333e5181cf",
+      "fqn": [
+        "youtube_trends_platform",
+        "silver",
+        "not_null_fct_videos_snapshot_at"
+      ],
+      "alias": "not_null_fct_videos_snapshot_at",
+      "checksum": {
+        "name": "none",
+        "checksum": ""
+      },
+      "config": {
+        "enabled": true,
+        "alias": null,
+        "schema": "dbt_test__audit",
+        "database": null,
+        "tags": [],
+        "meta": {},
+        "group": null,
+        "materialized": "test",
+        "severity": "ERROR",
+        "store_failures": null,
+        "store_failures_as": null,
+        "where": null,
+        "limit": null,
+        "fail_calc": "count(*)",
+        "warn_if": "!= 0",
+        "error_if": "!= 0"
+      },
+      "tags": [],
+      "description": "",
+      "columns": {},
+      "meta": {},
+      "group": null,
+      "docs": {
+        "show": true,
+        "node_color": null
+      },
+      "patch_path": null,
+      "build_path": null,
+      "unrendered_config": {},
+      "created_at": 1766236400.1872163,
+      "relation_name": null,
+      "raw_code": "{{ test_not_null(**_dbt_generic_test_kwargs) }}",
+      "language": "sql",
+      "refs": [
+        {
+          "name": "fct_videos",
+          "package": null,
+          "version": null
+        }
+      ],
+      "sources": [],
+      "metrics": [],
+      "depends_on": {
+        "macros": [
+          "macro.dbt.test_not_null",
+          "macro.dbt.get_where_subquery"
+        ],
+        "nodes": [
+          "model.youtube_trends_platform.fct_videos"
+        ]
+      },
+      "compiled_path": "target/compiled/youtube_trends_platform/models/silver/schema.yml/not_null_fct_videos_snapshot_at.sql",
+      "compiled": true,
+      "compiled_code": "\n    \n    \n\n\n\nselect snapshot_at\nfrom silver.fct_videos\nwhere snapshot_at is null\n\n\n",
+      "extra_ctes_injected": true,
+      "extra_ctes": [],
+      "contract": {
+        "enforced": false,
+        "alias_types": true,
+        "checksum": null
+      },
+      "column_name": "snapshot_at",
+      "file_key_name": "models.fct_videos",
+      "attached_node": "model.youtube_trends_platform.fct_videos",
+      "test_metadata": {
+        "name": "not_null",
+        "kwargs": {
+          "column_name": "snapshot_at",
+          "model": "{{ get_where_subquery(ref('fct_videos')) }}"
         },
         "namespace": null
       }
@@ -15223,24 +15225,12 @@
     "model.youtube_trends_platform.dim_channels": [
       "source.youtube_trends_platform.bronze.videos"
     ],
-    "model.youtube_trends_platform.fct_videos": [
-      "source.youtube_trends_platform.bronze.videos"
-    ],
     "seed.youtube_trends_platform.dim_regions_geo": [],
     "test.youtube_trends_platform.not_null_dim_channels_channel_id.93e5e4b23b": [
       "model.youtube_trends_platform.dim_channels"
     ],
     "test.youtube_trends_platform.unique_dim_channels_channel_id.d14657a1ec": [
       "model.youtube_trends_platform.dim_channels"
-    ],
-    "test.youtube_trends_platform.not_null_fct_videos_video_id.9ee09cfe60": [
-      "model.youtube_trends_platform.fct_videos"
-    ],
-    "test.youtube_trends_platform.not_null_fct_videos_region_id.6cbc3c9d50": [
-      "model.youtube_trends_platform.fct_videos"
-    ],
-    "test.youtube_trends_platform.not_null_fct_videos_snapshot_at.333e5181cf": [
-      "model.youtube_trends_platform.fct_videos"
     ],
     "test.youtube_trends_platform.not_null_dim_regions_geo_region_id.696fe68763": [
       "seed.youtube_trends_platform.dim_regions_geo"
@@ -15308,6 +15298,18 @@
     "test.youtube_trends_platform.not_null_fct_videos_growth_snapshot_at.0e32200480": [
       "model.youtube_trends_platform.fct_videos_growth"
     ],
+    "model.youtube_trends_platform.fct_videos": [
+      "source.youtube_trends_platform.bronze.videos"
+    ],
+    "test.youtube_trends_platform.not_null_fct_videos_video_id.9ee09cfe60": [
+      "model.youtube_trends_platform.fct_videos"
+    ],
+    "test.youtube_trends_platform.not_null_fct_videos_region_id.6cbc3c9d50": [
+      "model.youtube_trends_platform.fct_videos"
+    ],
+    "test.youtube_trends_platform.not_null_fct_videos_snapshot_at.333e5181cf": [
+      "model.youtube_trends_platform.fct_videos"
+    ],
     "source.youtube_trends_platform.bronze.categories": [],
     "source.youtube_trends_platform.bronze.languages": [],
     "source.youtube_trends_platform.bronze.regions": [],
@@ -15319,12 +15321,6 @@
       "test.youtube_trends_platform.not_null_dim_channels_channel_id.93e5e4b23b",
       "test.youtube_trends_platform.unique_dim_channels_channel_id.d14657a1ec"
     ],
-    "model.youtube_trends_platform.fct_videos": [
-      "model.youtube_trends_platform.fct_videos_growth",
-      "test.youtube_trends_platform.not_null_fct_videos_region_id.6cbc3c9d50",
-      "test.youtube_trends_platform.not_null_fct_videos_snapshot_at.333e5181cf",
-      "test.youtube_trends_platform.not_null_fct_videos_video_id.9ee09cfe60"
-    ],
     "seed.youtube_trends_platform.dim_regions_geo": [
       "model.youtube_trends_platform.videos_enriched",
       "test.youtube_trends_platform.not_null_dim_regions_geo_latitude.1ee89913a4",
@@ -15335,9 +15331,6 @@
     ],
     "test.youtube_trends_platform.not_null_dim_channels_channel_id.93e5e4b23b": [],
     "test.youtube_trends_platform.unique_dim_channels_channel_id.d14657a1ec": [],
-    "test.youtube_trends_platform.not_null_fct_videos_video_id.9ee09cfe60": [],
-    "test.youtube_trends_platform.not_null_fct_videos_region_id.6cbc3c9d50": [],
-    "test.youtube_trends_platform.not_null_fct_videos_snapshot_at.333e5181cf": [],
     "test.youtube_trends_platform.not_null_dim_regions_geo_region_id.696fe68763": [],
     "test.youtube_trends_platform.unique_dim_regions_geo_region_id.30c4b94892": [],
     "test.youtube_trends_platform.not_null_dim_regions_geo_region_name.e2390b8952": [],
@@ -15377,6 +15370,15 @@
     "test.youtube_trends_platform.not_null_fct_videos_growth_video_id.0f100eba87": [],
     "test.youtube_trends_platform.not_null_fct_videos_growth_region_id.afa2affac2": [],
     "test.youtube_trends_platform.not_null_fct_videos_growth_snapshot_at.0e32200480": [],
+    "model.youtube_trends_platform.fct_videos": [
+      "model.youtube_trends_platform.fct_videos_growth",
+      "test.youtube_trends_platform.not_null_fct_videos_region_id.6cbc3c9d50",
+      "test.youtube_trends_platform.not_null_fct_videos_snapshot_at.333e5181cf",
+      "test.youtube_trends_platform.not_null_fct_videos_video_id.9ee09cfe60"
+    ],
+    "test.youtube_trends_platform.not_null_fct_videos_video_id.9ee09cfe60": [],
+    "test.youtube_trends_platform.not_null_fct_videos_region_id.6cbc3c9d50": [],
+    "test.youtube_trends_platform.not_null_fct_videos_snapshot_at.333e5181cf": [],
     "source.youtube_trends_platform.bronze.categories": [
       "model.youtube_trends_platform.dim_categories"
     ],

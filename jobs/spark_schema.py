@@ -1,4 +1,10 @@
-from pyspark.sql.types import StructType, StructField, TimestampType, StringType, IntegerType
+from pyspark.sql.types import (
+    StructType, 
+    StructField, 
+    TimestampType, 
+    StringType, 
+    IntegerType
+)
 
 class SparkSchema:
     @staticmethod
@@ -63,11 +69,8 @@ class SparkSchema:
 
         for field in schema.fields:
             name = field.name
-            dtype = field.dataType.simpleString().upper()  # convert spark types to uppercase
+            dtype = field.dataType.simpleString().upper()
             nullable = field.nullable
-
-            # Optional: include NULL/NOT NULL
-            # null_str = "NULL" if nullable else "NOT NULL"
 
             lines.append(f"{name} {dtype}")
 
