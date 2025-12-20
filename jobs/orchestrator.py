@@ -2,6 +2,7 @@ from spark_session import SparkSessionFactory
 from spark_consumer import SparkKafkaConsumer
 from spark_schema import SparkSchema
 from ddl import IcebergDDLJob
+from compaction import CompactionJob
 
 
 class Orchestrator:
@@ -11,8 +12,11 @@ class Orchestrator:
         self.schema_provider = SparkSchema()
         self.spark_consumer = SparkKafkaConsumer(self.spark, self.schema_provider)
         self.ddl_job = IcebergDDLJob()
+        self.compaction_job = CompactionJob()
     
     def start_spark_streams(self, name):
+        if name == "compact":
+           self.compaction_job.run()
         if name == "ddl":
            self.ddl_job.run()
         if name == 'regions':

@@ -7,8 +7,8 @@ SPARK_SUBMIT = "/opt/spark/bin/spark-submit"
 JOB_MAIN = "/opt/streaming/jobs/main.py"
 
 with DAG(
-    dag_id="ddl_create_namespaces_tables",
-    description="ddl_create_namespaces_tables.py",
+    dag_id="spark_ddl_create_namespaces_tables",
+    description="create namespaces and tables in iceberg for youtube trends platform",
     start_date=datetime(2025, 1, 1),
     schedule=None,
     catchup=False,
