@@ -15,5 +15,8 @@ __pycache__/
 *.db
 
 jobs/*.csv
-documentation
 envs
+example.docx
+example.pptx
+Architecture Specification Document Youtube Trends Analytics Platform.docx
+
