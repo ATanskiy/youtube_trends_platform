@@ -1,7 +1,7 @@
 youtube_trends_platform:
-  target: dev
+  target: spark
   outputs:
-    dev:
+    spark:
       type: spark
       method: thrift
       host: spark_thriftserver
@@ -11,11 +11,21 @@ youtube_trends_platform:
       threads: 10
       auth: NOSASL
 
+    trino:
+      type: trino
+      host: trino
+      port: 8080
+      user: dbt
+      catalog: pg_bi_db
+      schema: gold
+      threads: 2
+
     postgres:
       type: postgres
-      host: pg-dbt
+      host: pg_bi_db
       port: 5432
       user: admin
       password: admin
       dbname: bi
       schema: bi
+      threads: 2

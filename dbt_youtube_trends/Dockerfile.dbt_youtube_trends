@@ -13,12 +13,13 @@ RUN apt-get update && apt-get install -y \
 RUN pip install \
     dbt-core==1.9.3 \
     "dbt-spark[PyHive]==1.9.3" \
+    dbt-trino==1.9.3 \
     dbt-postgres==1.9.1
 
 # Verify Spark adapter
 RUN python -c "import dbt.adapters.spark; print('dbt-spark adapter installed successfully')"
 RUN python -c "import dbt.include.spark; print('dbt-spark macros found')"
-RUN python -c "import dbt.adapters.postgres; print('dbt-postgres adapter installed successfully')"
+RUN python -c "import dbt.adapters.trino; print('dbt-postgres adapter installed successfully')"
 
 # Environment variable
 ENV DBT_PROFILES_DIR=/workspace

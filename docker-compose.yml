@@ -231,6 +231,7 @@ services:
       - "8080:8080"
     volumes:
       - ./configs/trino:/etc/trino
+      - ./docker/scripts/trino:/opt/trino/sql
     environment:
       - GF_INSTALL_PLUGINS=grafana-trino-datasource
     env_file:
@@ -285,11 +286,11 @@ services:
     networks:
       - youtube_trends
 
-  dbt_spark_postgres:
+  dbt_spark_trino:
     build:
       context: .
       dockerfile: ./dbt_youtube_trends/Dockerfile.dbt_youtube_trends
-    container_name: dbt_spark_postgres
+    container_name: dbt_spark_trino
     volumes:
       - ./dbt_youtube_trends:/workspace
       - ./docs:/workspace/target

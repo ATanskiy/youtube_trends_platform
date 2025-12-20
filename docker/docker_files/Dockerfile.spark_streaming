@@ -20,7 +20,8 @@ RUN pip install \
     six \
     urllib3 \
     pandas==2.0.2 \
-    python-dotenv==1.0.1
+    python-dotenv==1.0.1 \
+    pyyaml
 
 # Verify the installation works
 RUN python3 -c "import kafka; print('kafka-python installed successfully')"

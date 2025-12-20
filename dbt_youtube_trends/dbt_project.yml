@@ -22,12 +22,21 @@ models:
       +materialized: table
       +file_format: iceberg
       +table_type: iceberg
+      +tags: ["spark"]
       
     gold:
       +schema: gold  
       +materialized: table
       +file_format: iceberg
       +table_type: iceberg
+      +tags: ["spark"]
+    
+    bi:
+      +schema: bi
+      +materialized: incremental
+      +incremental_strategy: append
+      +table_type: table
+      +tags: ["trino"]
 
 seeds:
   youtube_trends_platform:
