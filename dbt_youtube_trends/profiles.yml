@@ -10,3 +10,12 @@ youtube_trends_platform:
       schema: silver
       threads: 10
       auth: NOSASL
+
+    postgres:
+      type: postgres
+      host: pg-dbt
+      port: 5432
+      user: admin
+      password: admin
+      dbname: bi
+      schema: bi

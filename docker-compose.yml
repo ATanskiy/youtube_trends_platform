@@ -285,11 +285,11 @@ services:
     networks:
       - youtube_trends
 
-  dbt_spark:
+  dbt_spark_postgres:
     build:
       context: .
       dockerfile: ./dbt_youtube_trends/Dockerfile.dbt_youtube_trends
-    container_name: dbt_spark
+    container_name: dbt_spark_postgres
     volumes:
       - ./dbt_youtube_trends:/workspace
       - ./docs:/workspace/target
@@ -303,6 +303,25 @@ services:
       - spark_thriftserver
     tty: true
     stdin_open: true
+
+  pg_bi_db:
+    image: postgres:17
+    container_name: pg_bi_db
+    hostname: pg-dbt
+    ports:
+      - "5438:5432"
+    env_file:
+      - envs/.env.pg_bi_db
+    volumes:
+      - ./volumes/.pg_bi_db:/var/lib/postgresql/data
+      - ./docker/scripts/pg_bi/bi_init.sh:/docker-entrypoint-initdb.d/bi_init.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d bi || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+    networks:
+      - youtube_trends
 
   dbt_docs_server:
     image: nginx:alpine
