@@ -10,7 +10,7 @@ with DAG(
     dag_id="spark_compact_namespaces",
     description="compact namespaces in iceberg tables for youtube trends platform",
     start_date=datetime(2025, 1, 1),
-    schedule=None,
+    schedule="0 2 * * *",
     catchup=False,
     tags=["spark", "compaction", "youtube_trends", "compact_namespaces"],
 ):

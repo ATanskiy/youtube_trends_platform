@@ -15,6 +15,13 @@ WITH src AS (
         CAST(published_at AS TIMESTAMP) AS published_at,
         CAST(created_at AS TIMESTAMP)   AS snapshot_at
     FROM bronze.videos
+
+    
+      WHERE created_at > (
+          SELECT COALESCE(MAX(snapshot_at), TIMESTAMP '1970-01-01')
+          FROM silver.fct_videos
+      )
+    
 ),
 
 deduped AS (

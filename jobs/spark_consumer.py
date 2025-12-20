@@ -10,7 +10,6 @@ from settings import (
     KAFKA_TOPIC_CATEGORIES,
     KAFKA_TOPIC_VIDEOS,
     KAFKA_TOPIC_COMMENTS,
-    MINIO_BUCKET_PREFIX,
     KAFKA_BOOTSTRAP_SERVERS,
     MINIO_YOUTUBE_TRENDS_BUCKET,
     MINIO_YOUTUBE_TRENDS_CATALOG,
@@ -122,16 +121,6 @@ class SparkKafkaConsumer:
         .trigger(processingTime="10 seconds")
         )
 
-
-    def _write_to_minio(self, df, path): 
-        return df.writeStream \
-            .format("parquet") \
-            .option("path", f"{MINIO_BUCKET_PREFIX}/{path}") \
-            .option("checkpointLocation", f"s3a:///{path}/_checkpoint") \
-            .outputMode("append") \
-            .trigger(processingTime="30 seconds")
-
-
     def consume_regions(self):
         df = self._read_batch_kafka(KAFKA_TOPIC_REGIONS)        
         parsed = self._parse_json(df, self.schema_provider.region_schema())
@@ -158,4 +147,4 @@ class SparkKafkaConsumer:
     def consume_comments(self):
         df = self._read_kafka(KAFKA_TOPIC_COMMENTS)
         parsed = self._parse_json(df, self.schema_provider.comments_schema())
-        return self._write_to_minio(parsed, "comments")
+        return self._write_to_iceberg(parsed, "comments")
