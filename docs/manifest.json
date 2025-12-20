@@ -2,8 +2,8 @@
   "metadata": {
     "dbt_schema_version": "https://schemas.getdbt.com/dbt/manifest/v12.json",
     "dbt_version": "1.9.3",
-    "generated_at": "2025-12-18T16:44:08.858474Z",
-    "invocation_id": "79a5e6bd-3a2c-41ba-b0c4-e9c902ff5e22",
+    "generated_at": "2025-12-20T10:45:38.431175Z",
+    "invocation_id": "f385dd04-2d67-4a86-999e-8b3490e28075",
     "env": {},
     "project_name": "youtube_trends_platform",
     "project_id": "c3555091a13ce013607d85f42fd22b40",

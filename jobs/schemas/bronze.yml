@@ -1,0 +1,49 @@
+namespace: bronze
+
+tables:
+
+  regions:
+    columns:
+      - { name: id, type: string }
+      - { name: name, type: string }
+      - { name: created_at, type: string }
+
+  languages:
+    columns:
+      - { name: id, type: string }
+      - { name: name, type: string }
+      - { name: created_at, type: string }
+
+  categories:
+    columns:
+      - { name: id, type: int }
+      - { name: name, type: string }
+      - { name: created_at, type: string }
+
+  videos:
+    columns:
+      - { name: id, type: string }
+      - { name: title, type: string }
+      - { name: description, type: string }
+      - { name: region_id, type: string }
+      - { name: language_id, type: string }
+      - { name: language_id_src, type: string }
+      - { name: published_at, type: string }
+      - { name: channel_id, type: string }
+      - { name: channel_title, type: string }
+      - { name: category_id, type: int }
+      - { name: duration, type: string }
+      - { name: view_count, type: int }
+      - { name: like_count, type: int }
+      - { name: favorite_count, type: int }
+      - { name: comment_count, type: int }
+      - { name: created_at, type: string }
+
+  comments:
+    columns:
+      - { name: id, type: string }
+      - { name: videoId, type: string }
+      - { name: textDisplay, type: string }
+      - { name: authorDisplayName, type: string }
+      - { name: likeCount, type: int }
+      - { name: publishedAt, type: string }

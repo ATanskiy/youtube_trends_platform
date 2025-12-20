@@ -1,13 +1,7 @@
-# import json
-# import isodate
-# import pandas as pd
 from spark_session import SparkSessionFactory
 from spark_consumer import SparkKafkaConsumer
 from spark_schema import SparkSchema
-from settings import (
-    YOUTUBE_API_KEY,
-    KAFKA_BOOTSTRAP_SERVERS,
-)
+from ddl import IcebergDDLJob
 
 
 class Orchestrator:
@@ -16,8 +10,11 @@ class Orchestrator:
         self.spark = spark_factory.create_session()
         self.schema_provider = SparkSchema()
         self.spark_consumer = SparkKafkaConsumer(self.spark, self.schema_provider)
+        self.ddl_job = IcebergDDLJob()
     
-    def start_spark_streams(self, name):      
+    def start_spark_streams(self, name):
+        if name == "ddl":
+           self.ddl_job.run()
         if name == 'regions':
            self.spark_consumer.consume_regions()
         if name == 'languages':
