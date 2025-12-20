@@ -2,8 +2,8 @@
   "metadata": {
     "dbt_schema_version": "https://schemas.getdbt.com/dbt/manifest/v12.json",
     "dbt_version": "1.9.3",
-    "generated_at": "2025-12-20T14:30:30.581645Z",
-    "invocation_id": "78adca99-b2a9-4e0a-8497-3ab1e3fdff99",
+    "generated_at": "2025-12-20T16:30:51.956012Z",
+    "invocation_id": "6dbad8f1-de42-4941-bc55-90959142cd96",
     "env": {},
     "project_name": "youtube_trends_platform",
     "project_id": "c3555091a13ce013607d85f42fd22b40",
@@ -3594,6 +3594,117 @@
         },
         "namespace": null
       }
+    },
+    "model.youtube_trends_platform.videos_enriched_tableau": {
+      "database": "youtube_trends",
+      "schema": "gold",
+      "name": "gold.videos_enriched_tableau",
+      "resource_type": "model",
+      "package_name": "youtube_trends_platform",
+      "path": "gold/videos_enriched_tableau.sql",
+      "original_file_path": "models/gold/videos_enriched_tableau.sql",
+      "unique_id": "model.youtube_trends_platform.videos_enriched_tableau",
+      "fqn": [
+        "youtube_trends_platform",
+        "gold",
+        "videos_enriched_tableau"
+      ],
+      "alias": "videos_enriched_tableau",
+      "checksum": {
+        "name": "sha256",
+        "checksum": "02e04104c41d8b3a94decb5e876d3c659725deb0dfd8fd0c59d359d9b2ed0518"
+      },
+      "config": {
+        "enabled": true,
+        "alias": null,
+        "schema": "gold",
+        "database": null,
+        "tags": [],
+        "meta": {},
+        "group": null,
+        "materialized": "table",
+        "incremental_strategy": null,
+        "batch_size": null,
+        "lookback": 1,
+        "begin": null,
+        "persist_docs": {},
+        "post-hook": [],
+        "pre-hook": [],
+        "quoting": {},
+        "column_types": {},
+        "full_refresh": null,
+        "unique_key": null,
+        "on_schema_change": "ignore",
+        "on_configuration_change": "apply",
+        "grants": {},
+        "packages": [],
+        "docs": {
+          "show": true,
+          "node_color": null
+        },
+        "contract": {
+          "enforced": false,
+          "alias_types": true
+        },
+        "event_time": null,
+        "concurrent_batches": null,
+        "access": "protected",
+        "file_format": "iceberg",
+        "table_type": "iceberg"
+      },
+      "tags": [],
+      "description": "",
+      "columns": {},
+      "meta": {},
+      "group": null,
+      "docs": {
+        "show": true,
+        "node_color": null
+      },
+      "patch_path": null,
+      "build_path": null,
+      "unrendered_config": {
+        "schema": "gold",
+        "materialized": "table",
+        "file_format": "iceberg",
+        "table_type": "iceberg"
+      },
+      "created_at": 1766244868.5780363,
+      "relation_name": "youtube_trends.gold.videos_enriched_tableau",
+      "raw_code": "{{ config(\r\n    materialized='table',\r\n    table_type='iceberg'\r\n) }}\r\n\r\nSELECT\r\n    video_id,\r\n    region_id,\r\n    language_id,\r\n    language_id_src,\r\n    channel_id,\r\n    category_id,\r\n\r\n    video_snapshot_at,\r\n    video_published_at,\r\n\r\n    CAST(video_snapshot_at AS DATE) AS video_snapshot_at_d,\r\n    date_format(video_snapshot_at, 'HH:mm:ss') AS video_snapshot_at_t,\r\n\r\n    year(video_snapshot_at)    AS year,\r\n    quarter(video_snapshot_at) AS quarter,\r\n    month(video_snapshot_at)   AS month,\r\n    day(video_snapshot_at)     AS day,\r\n    hour(video_snapshot_at)    AS hour,\r\n    minute(video_snapshot_at)  AS minute,\r\n    second(video_snapshot_at)  AS second,\r\n\r\n    dayofweek(video_snapshot_at) AS dow,\r\n    substr(date_format(video_snapshot_at, 'EEE'), 1, 1) AS dow_one_letter,\r\n    date_format(video_snapshot_at, 'EEE')  AS dow_short,\r\n    date_format(video_snapshot_at, 'EEEE') AS dow_full,\r\n\r\n    dayofyear(video_snapshot_at)  AS doy,\r\n    weekofyear(video_snapshot_at) AS week,\r\n\r\n    view_count,\r\n    like_count,\r\n    favorite_count,\r\n    comment_count,\r\n\r\n    view_growth,\r\n    like_growth,\r\n    favorite_growth,\r\n    comment_growth,\r\n\r\n    title,\r\n    description,\r\n    duration,\r\n\r\n    channel_title,\r\n    category_name,\r\n    language_name,\r\n    region_name,\r\n\r\n    latitude,\r\n    longitude\r\n\r\nFROM {{ ref('videos_enriched') }}",
+      "language": "sql",
+      "refs": [
+        {
+          "name": "videos_enriched",
+          "package": null,
+          "version": null
+        }
+      ],
+      "sources": [],
+      "metrics": [],
+      "depends_on": {
+        "macros": [],
+        "nodes": [
+          "model.youtube_trends_platform.videos_enriched"
+        ]
+      },
+      "compiled_path": "target/compiled/youtube_trends_platform/models/gold/videos_enriched_tableau.sql",
+      "compiled": true,
+      "compiled_code": "\n\nSELECT\n    video_id,\n    region_id,\n    language_id,\n    language_id_src,\n    channel_id,\n    category_id,\n\n    video_snapshot_at,\n    video_published_at,\n\n    CAST(video_snapshot_at AS DATE) AS video_snapshot_at_d,\n    date_format(video_snapshot_at, 'HH:mm:ss') AS video_snapshot_at_t,\n\n    year(video_snapshot_at)    AS year,\n    quarter(video_snapshot_at) AS quarter,\n    month(video_snapshot_at)   AS month,\n    day(video_snapshot_at)     AS day,\n    hour(video_snapshot_at)    AS hour,\n    minute(video_snapshot_at)  AS minute,\n    second(video_snapshot_at)  AS second,\n\n    dayofweek(video_snapshot_at) AS dow,\n    substr(date_format(video_snapshot_at, 'EEE'), 1, 1) AS dow_one_letter,\n    date_format(video_snapshot_at, 'EEE')  AS dow_short,\n    date_format(video_snapshot_at, 'EEEE') AS dow_full,\n\n    dayofyear(video_snapshot_at)  AS doy,\n    weekofyear(video_snapshot_at) AS week,\n\n    view_count,\n    like_count,\n    favorite_count,\n    comment_count,\n\n    view_growth,\n    like_growth,\n    favorite_growth,\n    comment_growth,\n\n    title,\n    description,\n    duration,\n\n    channel_title,\n    category_name,\n    language_name,\n    region_name,\n\n    latitude,\n    longitude\n\nFROM gold.videos_enriched",
+      "extra_ctes_injected": true,
+      "extra_ctes": [],
+      "contract": {
+        "enforced": false,
+        "alias_types": true,
+        "checksum": null
+      },
+      "access": "protected",
+      "constraints": [],
+      "version": null,
+      "latest_version": null,
+      "deprecation_date": null,
+      "primary_key": [],
+      "time_spine": null
     }
   },
   "sources": {
@@ -15310,6 +15421,9 @@
     "test.youtube_trends_platform.not_null_fct_videos_snapshot_at.333e5181cf": [
       "model.youtube_trends_platform.fct_videos"
     ],
+    "model.youtube_trends_platform.videos_enriched_tableau": [
+      "model.youtube_trends_platform.videos_enriched"
+    ],
     "source.youtube_trends_platform.bronze.categories": [],
     "source.youtube_trends_platform.bronze.languages": [],
     "source.youtube_trends_platform.bronze.regions": [],
@@ -15360,7 +15474,9 @@
       "test.youtube_trends_platform.not_null_dim_videos_video_id.074012a872"
     ],
     "test.youtube_trends_platform.not_null_dim_videos_video_id.074012a872": [],
-    "model.youtube_trends_platform.videos_enriched": [],
+    "model.youtube_trends_platform.videos_enriched": [
+      "model.youtube_trends_platform.videos_enriched_tableau"
+    ],
     "model.youtube_trends_platform.fct_videos_growth": [
       "model.youtube_trends_platform.videos_enriched",
       "test.youtube_trends_platform.not_null_fct_videos_growth_region_id.afa2affac2",
@@ -15379,6 +15495,7 @@
     "test.youtube_trends_platform.not_null_fct_videos_video_id.9ee09cfe60": [],
     "test.youtube_trends_platform.not_null_fct_videos_region_id.6cbc3c9d50": [],
     "test.youtube_trends_platform.not_null_fct_videos_snapshot_at.333e5181cf": [],
+    "model.youtube_trends_platform.videos_enriched_tableau": [],
     "source.youtube_trends_platform.bronze.categories": [
       "model.youtube_trends_platform.dim_categories"
     ],
