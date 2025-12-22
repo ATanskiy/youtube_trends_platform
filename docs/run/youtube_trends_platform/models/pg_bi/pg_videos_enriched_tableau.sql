@@ -19,7 +19,7 @@
     
 
     merge into "bi"."bi"."pg_videos_enriched_tableau" as DBT_INTERNAL_DEST
-        using "pg_videos_enriched_tableau__dbt_tmp111543117310" as DBT_INTERNAL_SOURCE
+        using "pg_videos_enriched_tableau__dbt_tmp113054999903" as DBT_INTERNAL_SOURCE
         on (
                     DBT_INTERNAL_SOURCE.video_id = DBT_INTERNAL_DEST.video_id
                 ) and (
