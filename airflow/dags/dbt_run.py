@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.bash import BashOperator
 
-DBT_CONTAINER = "dbt_spark"
+DBT_CONTAINER = "dbt_spark_trino"
 PROJECT_DIR = "/workspace"
 
 default_args = {
@@ -13,19 +13,44 @@ default_args = {
 
 with DAG(
     dag_id="dbt_run",
-    description="Run dbt models on Spark",
+    description="Run dbt models on Spark and Trino",
     start_date=datetime(2025, 1, 1),
     schedule="*/15 * * * *",
     catchup=False,
     default_args=default_args,
-    tags=["dbt", "spark", "youtube_trends"],
+    tags=["dbt", "youtube_trends"],
 ):
 
-    dbt_run = BashOperator(
-        task_id="dbt_run",
+    dbt_run_spark = BashOperator(
+        task_id="dbt_run_spark",
         bash_command=(
             f"docker exec {DBT_CONTAINER} "
-            f"dbt run --project-dir {PROJECT_DIR}"
+            f"dbt run "
+            f"--project-dir {PROJECT_DIR} "
+            f"--target spark "
+            f"--select tag:spark"
+        ),
+    )
+
+    trino_stage_videos_refresh = BashOperator(
+        task_id="trino_stage_videos_refresh",
+        bash_command="""
+        docker exec trino trino \
+          --server http://localhost:8080 \
+          --catalog youtube_trends \
+          --schema gold \
+          --file /opt/trino/sql/stg_videos_refresh.sql
+        """
+    )
+
+    dbt_run_postgres = BashOperator(
+        task_id="dbt_run_postgres",
+        bash_command=(
+            f"docker exec {DBT_CONTAINER} "
+            f"dbt run "
+            f"--project-dir {PROJECT_DIR} "
+            f"--target postgres "
+            f"--select tag:postgres"
         ),
     )
 
@@ -39,9 +64,10 @@ with DAG(
 
     fix_docs = BashOperator(
         task_id="fix_docs_database",
-        bash_command="""
-            docker exec dbt_spark /scripts/fix_dbt_docs_database.sh
+        bash_command=f"""
+        docker exec {DBT_CONTAINER} \
+        bash /scripts/fix_dbt_docs_database.sh
         """,
     )
 
-    dbt_run >> generate_docs >> fix_docs
+    dbt_run_spark >> trino_stage_videos_refresh >> dbt_run_postgres >> generate_docs >> fix_docs

@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.bash import BashOperator
 
-DBT_CONTAINER = "dbt_spark"
+DBT_CONTAINER = "dbt_spark_trino"
 PROJECT_DIR = "/workspace"
 
 default_args = {
@@ -13,20 +13,21 @@ default_args = {
 
 with DAG(
     dag_id="dbt_full_refresh",
-    description="Full refresh of all dbt models (recreate all tables)",
+    description="Full refresh of Spark and Trino dbt models",
     start_date=datetime(2025, 1, 1),
     schedule=None,
     catchup=False,
     default_args=default_args,
-    tags=["dbt", "spark", "full_refresh", "youtube_trends"],
+    tags=["dbt", "full_refresh", "youtube_trends"],
 ):
 
-    drop_seeds = BashOperator(
+    drop_dim_regions_geo = BashOperator(
         task_id="drop_dim_regions_geo",
         bash_command=f"""
             docker exec {DBT_CONTAINER} \
             dbt run-operation drop_table_if_exists \
-            --args '{{"relation": "silver.dim_regions_geo"}}'
+            --args '{{"relation": "silver.dim_regions_geo"}}' \
+            --target spark
         """
     )
 
@@ -34,15 +35,44 @@ with DAG(
         task_id="dbt_seed",
         bash_command=f"""
             docker exec {DBT_CONTAINER} \
-              dbt seed --project-dir {PROJECT_DIR}
+            dbt seed \
+              --project-dir {PROJECT_DIR} \
+              --target spark
         """
     )
 
-    dbt_full_refresh = BashOperator(
-        task_id="dbt_full_refresh",
+    dbt_full_refresh_spark = BashOperator(
+        task_id="dbt_full_refresh_spark",
         bash_command=f"""
             docker exec {DBT_CONTAINER} \
-              dbt run --project-dir {PROJECT_DIR} --full-refresh
+            dbt run \
+              --project-dir {PROJECT_DIR} \
+              --target spark \
+              --select tag:spark \
+              --full-refresh
+        """
+    )
+
+    trino_stage_videos_full_refresh = BashOperator(
+        task_id="trino_stage_videos_refresh",
+        bash_command="""
+        docker exec trino trino \
+          --server http://localhost:8080 \
+          --catalog youtube_trends \
+          --schema gold \
+          --file /opt/trino/sql/stg_videos_full_refresh.sql
+        """
+    )
+
+    dbt_full_refresh_postgres = BashOperator(
+        task_id="dbt_full_refresh_postgres",
+        bash_command=f"""
+            docker exec {DBT_CONTAINER} \
+            dbt run \
+              --project-dir {PROJECT_DIR} \
+              --target postgres \
+              --select tag:postgres \
+              --full-refresh
         """
     )
 
@@ -56,9 +86,16 @@ with DAG(
 
     fix_docs = BashOperator(
         task_id="fix_docs_database",
-        bash_command="""
-            docker exec dbt_spark /scripts/fix_dbt_docs_database.sh
+        bash_command=f"""
+            docker exec {DBT_CONTAINER} \
+            /scripts/fix_dbt_docs_database.sh
         """,
     )
 
-    drop_seeds >> dbt_seed >> dbt_full_refresh >> generate_docs >> fix_docs
+    (    drop_dim_regions_geo >> 
+         dbt_seed >> 
+         dbt_full_refresh_spark >> 
+         trino_stage_videos_full_refresh >> 
+         dbt_full_refresh_postgres >> 
+         generate_docs >> fix_docs
+    )

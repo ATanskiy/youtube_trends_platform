@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.bash import BashOperator
 
-DBT_CONTAINER = "dbt_spark"
+DBT_CONTAINER = "dbt_spark_trino"
 PROJECT_DIR = "/workspace"
 
 default_args = {

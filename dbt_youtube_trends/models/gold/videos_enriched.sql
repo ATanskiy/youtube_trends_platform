@@ -1,6 +1,9 @@
 {{ config(
-    materialized='table',
-    table_type='iceberg'
+    materialized='incremental',
+    incremental_strategy='merge',
+    unique_key=['video_id', 'region_id', 'video_snapshot_at'],
+    table_type='iceberg',
+    on_schema_change='append_new_columns'
 ) }}
 
 SELECT
@@ -23,10 +26,10 @@ SELECT
     COALESCE(g.comment_growth, 0)  AS comment_growth,
 
     v.title,
-    v.description,
     v.duration,
     ch.channel_title,
     c.category_name,
+
     COALESCE(
         l.language_name,
         CASE g.language_id_src
@@ -53,19 +56,15 @@ SELECT
             WHEN 'tg'  THEN 'Tajik'
             WHEN 'sh'  THEN 'Serbo-Croatian'
             WHEN 'jv'  THEN 'Javanese'
-
-            -- special / technical cases
             WHEN 'und' THEN 'Undetermined'
             WHEN 'zxx' THEN 'No linguistic content'
-
-            -- base languages that may appear without region
             WHEN 'en'  THEN 'English'
             WHEN 'es'  THEN 'Spanish'
             WHEN 'fr'  THEN 'French'
-
             ELSE NULL
         END
     ) AS language_name,
+
     r.region_name,
     rg.latitude,
     rg.longitude
@@ -77,3 +76,8 @@ LEFT JOIN {{ ref('dim_categories') }} c   ON g.category_id = c.category_id
 LEFT JOIN {{ ref('dim_languages') }} l    ON g.language_id = l.language_id
 LEFT JOIN {{ ref('dim_regions') }} r      ON g.region_id = r.region_id
 LEFT JOIN {{ ref('dim_regions_geo') }} rg ON g.region_id = rg.region_id
+
+{% if is_incremental() %}
+WHERE g.snapshot_at >
+    (SELECT max(video_snapshot_at) FROM {{ this }})
+{% endif %}
